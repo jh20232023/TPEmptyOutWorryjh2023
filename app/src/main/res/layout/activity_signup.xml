@@ -4,8 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity"
-    android:padding="16dp">
+    tools:context=".activities.LoginActivity">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:background="#656b5d"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/baseline_arrow_back_24">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회 원 가 입"
+            android:textSize="17sp"
+            android:fontFamily="@font/notosansbold"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp" />
+    </com.google.android.material.appbar.MaterialToolbar>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_id"
         android:layout_above="@id/input_layout_PW"
@@ -16,8 +30,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="300dp"
             android:layout_height="40dp"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_above="@id/input_layout_PW_confirm"

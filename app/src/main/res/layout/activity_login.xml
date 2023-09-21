@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity"
-    android:padding="16dp">
+    tools:context=".activities.LoginActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#656b5d"
+        android:text="       비워 (Don't be worry)"
+        android:fontFamily="@font/notosansbold"
+        android:textColor="@color/white"
+        android:textSize="18sp"/>
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

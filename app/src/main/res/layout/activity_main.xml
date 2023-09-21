@@ -8,17 +8,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <CalendarView
-            android:id="@+id/calendarview"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#656b5d"/>
 
         <FrameLayout
             android:id="@+id/container_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/calendarview"
+            android:layout_above="@id/bnv"
             android:layout_marginTop="-2dp" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
