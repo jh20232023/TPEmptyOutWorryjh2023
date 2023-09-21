@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/storylist" android:title="일상" android:icon="@drawable/baseline_menu_book_24"/>
+    <item android:id="@+id/calendar" android:title="달력" android:icon="@drawable/baseline_calendar_month_24"/>
+    <item android:id="@+id/sharedpost" android:title="일상 공유" android:icon="@drawable/baseline_share_24"/>
+    <item android:id="@+id/worrydelete" android:title="감정 비우기" android:icon="@drawable/baseline_delete_outline_24"/>
+
+</menu>

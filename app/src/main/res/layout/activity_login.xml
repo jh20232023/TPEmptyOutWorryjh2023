@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LoginActivity"
+    android:padding="16dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/clover"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/iv_naver"
+        android:layout_marginBottom="150dp"/>
+    <TextView
+        android:id="@+id/tv_login_signup"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/tv_guest"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:background="#656b5d"
+        android:fontFamily="@font/notosansbold"
+        android:gravity="center"
+        android:text="회 원 가 입"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_above="@id/tv_login_signup"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:text="이메일로 로그인"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:background="#656b5d"
+        android:textStyle="bold"
+        android:fontFamily="@font/notosansbold"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp" />
+    <ImageView
+        android:layout_marginLeft="70dp"
+        android:layout_marginBottom="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_email"
+        android:src="@drawable/baseline_email_24"
+        android:layout_alignStart="@id/tv_email"/>
+    <ImageView
+        android:id="@+id/iv_kakao"
+        android:layout_alignLeft="@id/tv_email"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/tv_email"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/icon_kakako"/>
+    <ImageView
+        android:id="@+id/iv_naver"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/tv_email"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/icon_naver"/>
+    <ImageView
+        android:id="@+id/iv_google"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/tv_email"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/icon_google"
+        android:layout_alignRight="@id/tv_email"/>
+
+    <TextView
+        android:id="@+id/tv_guest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="게스트로 로그인 하기"
+        android:textColor="#888888"
+        android:textSize="13sp"
+        android:fontFamily="@font/notosansbold"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@id/tv_login_signup"
+        android:layout_marginBottom="50dp"/>
+</RelativeLayout>
