@@ -46,7 +46,7 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_above="@id/btn_login"
+        android:layout_above="@id/input_layout_ninkname"
         android:id="@+id/input_layout_PW_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,6 +58,21 @@
             android:inputType="textPassword"
             />
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_above="@id/btn_login"
+        android:id="@+id/input_layout_ninkname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="닉네임">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:inputType="textPassword"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <Button
         android:id="@+id/btn_login"
         android:layout_width="300dp"
@@ -66,7 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="230dp"
-        android:text="로그인"
+        android:text="회 원 가 입"
         android:fontFamily="@font/notosansbold"
         android:textSize="13sp"
         android:backgroundTint="#656b5d" />

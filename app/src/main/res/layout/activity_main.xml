@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinator"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,8 +14,7 @@
             android:id="@+id/container_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bnv"
-            android:layout_marginTop="-2dp" />
+            android:layout_above="@id/bnv"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnv"
@@ -26,21 +26,13 @@
             app:itemTextColor="@color/white"
             android:background="#656b5d"
             style="@style/Widget.MaterialComponents.BottomNavigationView" />
+        <include
+            android:id="@+id/included"
+            android:layout_below="@id/bnv"
+            layout="@layout/bottomsheet_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            style="@style/Widget.MaterialComponents.FloatingActionButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_above="@id/bnv"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/baseline_post_add_24"
-            app:backgroundTint="#656b5d"
-            app:fabCustomSize="50dp" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
