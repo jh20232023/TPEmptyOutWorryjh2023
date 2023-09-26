@@ -15,7 +15,6 @@
         app:navigationIcon="@drawable/baseline_close_24">
         <TextView
             android:layout_gravity="center"
-            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="일상 포스팅"
@@ -46,17 +45,59 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
     <ImageView
-        android:id="@+id/emoji"
+        android:id="@+id/smile"
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/soso" />
+        android:visibility="gone"
+        android:src="@drawable/smile" />
+        <ImageView
+            android:id="@+id/notbad"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:src="@drawable/notbad" />
+        <ImageView
+            android:id="@+id/soso"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:src="@drawable/soso" />
+        <ImageView
+            android:id="@+id/sad"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/sad" />
+        <ImageView
+            android:id="@+id/angry"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:src="@drawable/angry" />
+        <ImageView
+            android:id="@+id/emoji"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/soso" />
+
+<!--//////////////////////////////////////-->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="오늘의 기분"
+            android:text="기분 선택"
             android:textStyle="bold"
             android:fontFamily="@font/notosansbold"
             android:includeFontPadding="false"
@@ -71,23 +112,50 @@
         android:background="@drawable/bg_tv"
         android:layout_marginRight="10dp">
         <TextView
-            android:id="@+id/tv_text"
+            android:id="@+id/tv_date"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="    제목 : "
+            android:text="    날짜 : "
             android:textSize="15sp"
             android:fontFamily="@font/notosansbold"/>
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/et_date"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tv_text"
+            android:layout_toRightOf="@id/tv_date"
             android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:inputType="date"/>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_toRightOf="@id/et_date"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제목 : "
+            android:textSize="15sp"
+            android:fontFamily="@font/notosansbold"/>
+
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_title"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:inputType="text"
+            android:lines="1"/>
+
+
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_tv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_emoji">
         <ImageView
@@ -112,15 +180,19 @@
             android:hint="오늘 어떤 하루를 보내셨나요?"
             android:includeFontPadding="false"
             android:padding="8dp"/>
-
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_in_botoomsheet"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="360dp"
+            android:layout_height="250dp"
+            android:layout_below="@id/et_message"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"/>
     </RelativeLayout>
-
-
-
-
-
-
-
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

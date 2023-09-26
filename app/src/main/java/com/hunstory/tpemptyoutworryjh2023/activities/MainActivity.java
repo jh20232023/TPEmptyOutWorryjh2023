@@ -2,6 +2,7 @@ package com.hunstory.tpemptyoutworryjh2023.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -16,6 +17,7 @@ import com.hunstory.tpemptyoutworryjh2023.fragment.WorryDeleteFragment;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
+    SQLiteDatabase db;
 
 
 
@@ -36,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.worrydelete) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, new WorryDeleteFragment()).commit();
             }
-
-
             return true;
         });
+        db =openOrCreateDatabase("nonmember",MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS member(date STRING PRIMARY KEY, title VARCHAR(20) NOT NULL, message TEXT, em STRING)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS fillImg(num INTEGER PRIMARY KEY AUTOINCREMENT, filePath STRING)");
 
     }
 

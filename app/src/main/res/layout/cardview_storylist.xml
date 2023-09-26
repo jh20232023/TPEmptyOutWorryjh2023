@@ -76,7 +76,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_storylist"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
