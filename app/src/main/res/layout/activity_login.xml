@@ -14,12 +14,11 @@
         android:textColor="@color/white"
         android:textSize="18sp"/>
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/clover"
-        android:layout_centerHorizontal="true"
+        android:layout_width="400dp"
+        android:layout_height="350dp"
+        android:src="@drawable/remove_bg_login"
         android:layout_above="@id/iv_naver"
-        android:layout_marginBottom="150dp"/>
+        android:layout_marginBottom="35dp"/>
     <TextView
         android:id="@+id/tv_login_signup"
         android:layout_width="300dp"

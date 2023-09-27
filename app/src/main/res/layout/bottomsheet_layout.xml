@@ -38,86 +38,22 @@
     <RelativeLayout
         android:id="@+id/layout_emoji"
         android:background="@drawable/bg_tv"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_below="@id/toolbar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-    <ImageView
-        android:id="@+id/smile"
-        android:layout_width="45dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:src="@drawable/smile" />
-        <ImageView
-            android:id="@+id/notbad"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
-            android:src="@drawable/notbad" />
-        <ImageView
-            android:id="@+id/soso"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
-            android:src="@drawable/soso" />
-        <ImageView
-            android:id="@+id/sad"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/sad" />
-        <ImageView
-            android:id="@+id/angry"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
-            android:src="@drawable/angry" />
-        <ImageView
-            android:id="@+id/emoji"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/soso" />
-
-<!--//////////////////////////////////////-->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="기분 선택"
-            android:textStyle="bold"
-            android:fontFamily="@font/notosansbold"
-            android:includeFontPadding="false"
-            android:layout_below="@id/emoji"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/layout_title"
-        android:layout_alignBottom="@id/layout_emoji"
-        android:layout_toRightOf="@id/layout_emoji"
-        android:layout_width="match_parent"
-        android:layout_height="98dp"
-        android:background="@drawable/bg_tv"
-        android:layout_marginRight="10dp">
         <TextView
             android:id="@+id/tv_date"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/emoji"
             android:text="    날짜 : "
             android:textSize="15sp"
+            android:layout_marginLeft="20dp"
             android:fontFamily="@font/notosansbold"/>
         <EditText
             android:id="@+id/et_date"
@@ -136,7 +72,6 @@
             android:text="제목 : "
             android:textSize="15sp"
             android:fontFamily="@font/notosansbold"/>
-
         <EditText
             android:id="@+id/et_title"
             android:layout_width="90dp"
@@ -146,9 +81,76 @@
             android:layout_centerVertical="true"
             android:inputType="text"
             android:lines="1"/>
+<!--                           -->
+        <ImageView
+            android:id="@+id/iv_baloon"
+            android:visibility="gone"
+            android:layout_width="350dp"
+            android:layout_height="70dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/baloon"
+            android:layout_toRightOf="@id/emoji"/>
+    <ImageView
+        android:id="@+id/smile"
+        android:layout_marginLeft="5dp"
+        android:layout_width="45dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:src="@drawable/smile" />
+        <ImageView
+            android:id="@+id/notbad"
+            android:layout_marginLeft="5dp"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:src="@drawable/notbad" />
+        <ImageView
+            android:id="@+id/soso"
+            android:layout_marginLeft="5dp"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:src="@drawable/soso" />
+        <ImageView
+            android:id="@+id/sad"
+            android:layout_marginLeft="5dp"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:src="@drawable/sad" />
+        <ImageView
+            android:id="@+id/angry"
+            android:layout_marginLeft="5dp"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:src="@drawable/angry" />
+        <ImageView
+            android:id="@+id/emoji"
+            android:layout_marginLeft="8dp"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/soso" />
+<!--                                                  -->
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="기분 선택"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/notosansbold"
+            android:includeFontPadding="false"
+            android:layout_below="@id/emoji"/>
     </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_marginLeft="10dp"

@@ -3,6 +3,10 @@ package com.hunstory.tpemptyoutworryjh2023.fragment;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
@@ -32,18 +36,21 @@ import com.hunstory.tpemptyoutworryjh2023.data.SelectedImageData;
 import com.hunstory.tpemptyoutworryjh2023.databinding.BottomsheetLayoutBinding;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     BottomsheetLayoutBinding binding;
+    boolean isAnimating= false;
     SQLiteDatabase db;
-    String imageRealPath;
     Intent intent;
+    String imageRealPath;
     Uri uri;
     // ArrayList<NonMemberDatas> memberDatas = new ArrayList<>();
      RecyclerForInFragmentAdapter adapter;
      ArrayList<SelectedImageData> selectedImageData= new ArrayList<>();
      ArrayList<String> uriList;
     String pickImg;
+
 
     @Nullable
     @Override
@@ -84,7 +91,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode()==RESULT_OK) {
+            if (result.getResultCode()==RESULT_OK && intent != null) {
             intent = result.getData();
             ClipData clipData = intent.getClipData();
             int count = clipData.getItemCount();
@@ -106,6 +113,48 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         }
     });
     void emojiSelect(){
+        if (binding.ivBaloon.getVisibility()==View.VISIBLE){
+            binding.smile.setVisibility(View.GONE);
+            binding.notbad.setVisibility(View.GONE);
+            binding.soso.setVisibility(View.GONE);
+            binding.sad.setVisibility(View.GONE);
+            binding.angry.setVisibility(View.GONE);
+            binding.ivBaloon.setVisibility(View.GONE);
+        } else if (isAnimating) {
+            
+        }
+        binding.smile.setVisibility(View.VISIBLE);
+        binding.notbad.setVisibility(View.VISIBLE);
+        binding.soso.setVisibility(View.VISIBLE);
+        binding.sad.setVisibility(View.VISIBLE);
+        binding.angry.setVisibility(View.VISIBLE);
+        binding.ivBaloon.setVisibility(View.VISIBLE);
+        // smile
+
+        ObjectAnimator.ofFloat(binding.smile,"TranslationX",220f).addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                binding.smile.setVisibility(View.GONE);
+                isAnimating = false;
+            }
+            @Override
+            public void onAnimationStart(Animator animation) {
+                isAnimating = true;
+            }
+        });
+        // notBad
+        ObjectAnimator.ofFloat(binding.notbad,"TranslationX",370f).start();
+        // soso
+        ObjectAnimator.ofFloat(binding.soso,"TranslationX",520f).start();
+        // sad
+        ObjectAnimator.ofFloat(binding.sad,"TranslationX",670f).start();
+        // angry
+        ObjectAnimator.ofFloat(binding.angry,"TranslationX",820f).start();
+
+
+
+
+
 
     }
     ArrayList<String> getRealPathFromUri(Uri uri){

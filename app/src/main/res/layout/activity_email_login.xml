@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:background="#656b5d"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,9 +34,10 @@
         android:gravity="center"
         android:hint="ID">
         <com.google.android.material.textfield.TextInputEditText
+            android:textColor="@color/black"
             android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:inputType="textPassword"
+            android:layout_height="50dp"
+            android:inputType="textEmailAddress"
             />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -45,11 +47,12 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:hint="PW">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:textColor="@color/black"
             android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:inputType="textPassword"
-            />
+            android:layout_height="50dp"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/btn_login"
@@ -58,9 +61,17 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="230dp"
+        android:layout_marginBottom="260dp"
         android:text="로그인"
         android:fontFamily="@font/notosansbold"
         android:textSize="13sp"
         android:backgroundTint="#656b5d" />
+
+    <ImageView
+        android:layout_marginLeft="69dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_above="@id/input_layout_id"
+        android:layout_marginBottom="14dp"
+        android:src="@drawable/emaillogin" />
 </RelativeLayout>
