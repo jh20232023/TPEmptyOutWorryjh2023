@@ -27,6 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -40,7 +41,6 @@ import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     BottomsheetLayoutBinding binding;
-    boolean isAnimating= false;
     SQLiteDatabase db;
     Intent intent;
     String imageRealPath;
@@ -48,8 +48,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     // ArrayList<NonMemberDatas> memberDatas = new ArrayList<>();
      RecyclerForInFragmentAdapter adapter;
      ArrayList<SelectedImageData> selectedImageData= new ArrayList<>();
-     ArrayList<String> uriList;
+     ArrayList<String> uriList = new ArrayList<>();
     String pickImg;
+    int isAnimating=1;
+    AnimatorSet animatorSet = new AnimatorSet();
 
 
     @Nullable
@@ -63,7 +65,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         binding.emoji.setOnClickListener(view1 -> emojiSelect());
         binding.ivSelectImg.setOnClickListener(view1 -> selectImg());
         binding.btnPosting.setOnClickListener(view1 -> {
@@ -74,12 +75,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             String[] dates= new String[]{title,message,emojiImg,date};
             db.execSQL("INSERT INTO nonmember(date, title, message, em) VALUES(?,?,?,?)",dates);
 
-
-
-
         });
         adapter = new RecyclerForInFragmentAdapter(getActivity(),selectedImageData);
         binding.recyclerviewInBotoomsheet.setAdapter(adapter);
+
     }
     void selectImg(){
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
@@ -91,76 +90,91 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode()==RESULT_OK && intent != null) {
-            intent = result.getData();
-            ClipData clipData = intent.getClipData();
+            if (result.getResultCode()==RESULT_OK) {
+                Intent data = result.getData();
+                ClipData clipData = result.getData().getClipData();
             int count = clipData.getItemCount();
             for (int i=0;i<count;i++) {
-                // imageRealPath = getRealPathFromUri(uri);
-                Uri uri = clipData.getItemAt(i).getUri();
-                uriList = getRealPathFromUri(uri);
-                selectedImageData.add(new SelectedImageData());
-
-
-                    db.execSQL("INSERT INTO fileImg(filePath) VALUES('" + pickImg + "')");
-
-
+                ClipData.Item item = clipData.getItemAt(i);
+                Uri uri = item.getUri();
+                // 절대경로 uri
+                uriList.add(i,getImagePath(uri));
+                selectedImageData.add(new SelectedImageData(uriList.get(i)));
             }
                 adapter.notifyDataSetChanged();
         }
-
-
-        }
-    });
+    }
+});
     void emojiSelect(){
-        if (binding.ivBaloon.getVisibility()==View.VISIBLE){
+        isAnimating++;
+        if (isAnimating %2 == 0) {
+            binding.smile.setVisibility(View.VISIBLE);
+            binding.notbad.setVisibility(View.VISIBLE);
+            binding.soso.setVisibility(View.VISIBLE);
+            binding.sad.setVisibility(View.VISIBLE);
+            binding.angry.setVisibility(View.VISIBLE);
+            binding.ivBaloon.setVisibility(View.VISIBLE);
+            // smile
+            ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",220f);
+            // notBad
+            ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",370f);
+            // soso
+            ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",520f);
+            // sad
+            ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",670f);
+            // angry
+            ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",820f);
+            ani1.start();
+            ani2.start();
+            ani3.start();
+            ani4.start();
+            ani5.start();
+            binding.etDate.setEnabled(false);
+            binding.etTitle.setEnabled(false);
+
+            binding.smile.setOnClickListener(view -> clickSmile());
+            binding.notbad.setOnClickListener(view -> clickNotbad());
+            binding.soso.setOnClickListener(view -> clickSoso());
+            binding.sad.setOnClickListener(view -> clickSad());
+            binding.angry.setOnClickListener(view -> clickAngry());
+
+        } else if (isAnimating %2 == 1) {
+            animatorSet.cancel();
             binding.smile.setVisibility(View.GONE);
             binding.notbad.setVisibility(View.GONE);
             binding.soso.setVisibility(View.GONE);
             binding.sad.setVisibility(View.GONE);
             binding.angry.setVisibility(View.GONE);
             binding.ivBaloon.setVisibility(View.GONE);
-        } else if (isAnimating) {
-            
+
+            binding.etDate.setEnabled(true);
+            binding.etTitle.setEnabled(true);
+
+            // smile
+            ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",0f);
+            // notBad
+            ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",0f);
+            // soso
+            ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",0f);
+            // sad
+            ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",0f);
+            // angry
+            ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",0f);
+            ani1.start();
+            ani2.start();
+            ani3.start();
+            ani4.start();
+            ani5.start();
         }
-        binding.smile.setVisibility(View.VISIBLE);
-        binding.notbad.setVisibility(View.VISIBLE);
-        binding.soso.setVisibility(View.VISIBLE);
-        binding.sad.setVisibility(View.VISIBLE);
-        binding.angry.setVisibility(View.VISIBLE);
-        binding.ivBaloon.setVisibility(View.VISIBLE);
-        // smile
-
-        ObjectAnimator.ofFloat(binding.smile,"TranslationX",220f).addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                binding.smile.setVisibility(View.GONE);
-                isAnimating = false;
-            }
-            @Override
-            public void onAnimationStart(Animator animation) {
-                isAnimating = true;
-            }
-        });
-        // notBad
-        ObjectAnimator.ofFloat(binding.notbad,"TranslationX",370f).start();
-        // soso
-        ObjectAnimator.ofFloat(binding.soso,"TranslationX",520f).start();
-        // sad
-        ObjectAnimator.ofFloat(binding.sad,"TranslationX",670f).start();
-        // angry
-        ObjectAnimator.ofFloat(binding.angry,"TranslationX",820f).start();
-
-
-
-
-
-
     }
+
+
     ArrayList<String> getRealPathFromUri(Uri uri){
         String [] projection = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.MediaColumns.RELATIVE_PATH};
         String orderBy = MediaStore.Images.Media.DATE_MODIFIED;
+        //
         Cursor cursor = getActivity().getContentResolver().query(uri , projection, null , null , orderBy + " DESC");
+        //
         String absolutePathOfImage;
         ArrayList<String> ImagesList = new ArrayList<>();
         int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -171,7 +185,177 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         }
         return ImagesList;
     }
+    private String getImagePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(columnIndex);
+            cursor.close();
+            return imagePath;
+        }
+        return null;
+    }
+
+    void clickSmile(){
+        isAnimating++;
+        binding.emoji.setImageResource(R.drawable.smile);
+
+        animatorSet.end();
+        binding.smile.setVisibility(View.GONE);
+        binding.notbad.setVisibility(View.GONE);
+        binding.soso.setVisibility(View.GONE);
+        binding.sad.setVisibility(View.GONE);
+        binding.angry.setVisibility(View.GONE);
+        binding.ivBaloon.setVisibility(View.GONE);
+
+        binding.etDate.setEnabled(true);
+        binding.etTitle.setEnabled(true);
+
+        // smile
+        ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",0f);
+        // notBad
+        ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",0f);
+        // soso
+        ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",0f);
+        // sad
+        ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",0f);
+        // angry
+        ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",0f);
+        ani1.start();
+        ani2.start();
+        ani3.start();
+        ani4.start();
+        ani5.start();
+    }
+    void clickSoso(){
+        isAnimating++;
+        binding.emoji.setImageResource(R.drawable.soso);
+
+        animatorSet.end();
+        binding.smile.setVisibility(View.GONE);
+        binding.notbad.setVisibility(View.GONE);
+        binding.soso.setVisibility(View.GONE);
+        binding.sad.setVisibility(View.GONE);
+        binding.angry.setVisibility(View.GONE);
+        binding.ivBaloon.setVisibility(View.GONE);
+
+        binding.etDate.setEnabled(true);
+        binding.etTitle.setEnabled(true);
+
+        // smile
+        ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",0f);
+        // notBad
+        ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",0f);
+        // soso
+        ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",0f);
+        // sad
+        ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",0f);
+        // angry
+        ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",0f);
+        ani1.start();
+        ani2.start();
+        ani3.start();
+        ani4.start();
+        ani5.start();
+
+    }
+    void clickNotbad(){
+        isAnimating++;
+        binding.emoji.setImageResource(R.drawable.notbad);
+
+        animatorSet.end();
+        binding.smile.setVisibility(View.GONE);
+        binding.notbad.setVisibility(View.GONE);
+        binding.soso.setVisibility(View.GONE);
+        binding.sad.setVisibility(View.GONE);
+        binding.angry.setVisibility(View.GONE);
+        binding.ivBaloon.setVisibility(View.GONE);
+
+        binding.etDate.setEnabled(true);
+        binding.etTitle.setEnabled(true);
+
+        // smile
+        ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",0f);
+        // notBad
+        ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",0f);
+        // soso
+        ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",0f);
+        // sad
+        ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",0f);
+        // angry
+        ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",0f);
+        ani1.start();
+        ani2.start();
+        ani3.start();
+        ani4.start();
+        ani5.start();
 
 
+    }
+    void clickSad(){
+        isAnimating++;
+        binding.emoji.setImageResource(R.drawable.sad);
 
+        animatorSet.end();
+        binding.smile.setVisibility(View.GONE);
+        binding.notbad.setVisibility(View.GONE);
+        binding.soso.setVisibility(View.GONE);
+        binding.sad.setVisibility(View.GONE);
+        binding.angry.setVisibility(View.GONE);
+        binding.ivBaloon.setVisibility(View.GONE);
+
+        binding.etDate.setEnabled(true);
+        binding.etTitle.setEnabled(true);
+
+        // smile
+        ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",0f);
+        // notBad
+        ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",0f);
+        // soso
+        ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",0f);
+        // sad
+        ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",0f);
+        // angry
+        ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",0f);
+        ani1.start();
+        ani2.start();
+        ani3.start();
+        ani4.start();
+        ani5.start();
+
+    }
+    void clickAngry(){
+        isAnimating++;
+        binding.emoji.setImageResource(R.drawable.angry);
+
+        animatorSet.end();
+        binding.smile.setVisibility(View.GONE);
+        binding.notbad.setVisibility(View.GONE);
+        binding.soso.setVisibility(View.GONE);
+        binding.sad.setVisibility(View.GONE);
+        binding.angry.setVisibility(View.GONE);
+        binding.ivBaloon.setVisibility(View.GONE);
+
+        binding.etDate.setEnabled(true);
+        binding.etTitle.setEnabled(true);
+
+        // smile
+        ObjectAnimator ani1= ObjectAnimator.ofFloat(binding.smile,"TranslationX",0f);
+        // notBad
+        ObjectAnimator ani2= ObjectAnimator.ofFloat(binding.notbad,"TranslationX",0f);
+        // soso
+        ObjectAnimator ani3= ObjectAnimator.ofFloat(binding.soso,"TranslationX",0f);
+        // sad
+        ObjectAnimator ani4= ObjectAnimator.ofFloat(binding.sad,"TranslationX",0f);
+        // angry
+        ObjectAnimator ani5 = ObjectAnimator.ofFloat(binding.angry,"TranslationX",0f);
+        ani1.start();
+        ani2.start();
+        ani3.start();
+        ani4.start();
+        ani5.start();
+
+    }
 }
