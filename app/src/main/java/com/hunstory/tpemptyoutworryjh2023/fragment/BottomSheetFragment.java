@@ -7,7 +7,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.DatePickerDialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,6 +19,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -33,15 +36,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
+import com.hunstory.tpemptyoutworryjh2023.data.MyDatabaseHelper;
 import com.hunstory.tpemptyoutworryjh2023.data.SelectedImageData;
 import com.hunstory.tpemptyoutworryjh2023.databinding.BottomsheetLayoutBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     BottomsheetLayoutBinding binding;
-    SQLiteDatabase db;
     Intent intent;
     String imageRealPath;
     Uri uri;
@@ -52,6 +56,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     String pickImg;
     int isAnimating=1;
     AnimatorSet animatorSet = new AnimatorSet();
+    MyDatabaseHelper myDatabaseHelper;
+    SQLiteDatabase sqLiteDatabase;
 
 
     @Nullable
@@ -64,7 +70,13 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        myDatabaseHelper = new MyDatabaseHelper(getContext());
+        sqLiteDatabase = myDatabaseHelper.getWritableDatabase();
 
+        binding.toolbar.setNavigationOnClickListener(view1 -> {
+            dismiss();
+        });
+        binding.etDate.setOnClickListener(view1 -> clickDate());
         binding.emoji.setOnClickListener(view1 -> emojiSelect());
         binding.ivSelectImg.setOnClickListener(view1 -> selectImg());
         binding.btnPosting.setOnClickListener(view1 -> {
@@ -72,12 +84,30 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             String message = binding.etMessage.getText().toString();
             String emojiImg= binding.emoji.toString();
             String date = binding.etDate.getText().toString();
-            String[] dates= new String[]{title,message,emojiImg,date};
-            db.execSQL("INSERT INTO nonmember(date, title, message, em) VALUES(?,?,?,?)",dates);
+            String[] dates= new String[]{date,title,message,emojiImg};
+
+            sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)",dates);
+            sqLiteDatabase.close();
+            dismiss();
 
         });
         adapter = new RecyclerForInFragmentAdapter(getActivity(),selectedImageData);
         binding.recyclerviewInBotoomsheet.setAdapter(adapter);
+
+    }
+    void clickDate() {
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
+        datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                String selectDate = (year-2000) + "/" + (month + 1)+ "/" + day;
+                binding.etDate.setText(selectDate);
+
+            }
+        });
+        datePickerDialog.show();
+
 
     }
     void selectImg(){

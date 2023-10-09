@@ -41,7 +41,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp" />
     </RelativeLayout>
-    <androidx.cardview.widget.CardView
+    <androidx.recyclerview.widget.RecyclerView
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
         android:id="@+id/cardview_storylist"
         android:layout_below="@id/layout_relative"
         android:layout_width="match_parent"

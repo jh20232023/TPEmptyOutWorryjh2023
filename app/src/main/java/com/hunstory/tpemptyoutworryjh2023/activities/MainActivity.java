@@ -40,9 +40,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        db =openOrCreateDatabase("nonmember",MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS member(date STRING PRIMARY KEY, title VARCHAR(20) NOT NULL, message TEXT, em STRING)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS fillImg(num INTEGER PRIMARY KEY AUTOINCREMENT, filePath STRING)");
+
 
     }
 
