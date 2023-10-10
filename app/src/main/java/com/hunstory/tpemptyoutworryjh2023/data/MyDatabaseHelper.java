@@ -16,8 +16,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS member(date STRING PRIMARY KEY, title VARCHAR(20) NOT NULL, message TEXT, em STRING)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS fillImg(num INTEGER PRIMARY KEY AUTOINCREMENT, filePath STRING)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS member(num INTEGER PRIMARY KEY AUTOINCREMENT, date STRING NOT NULL, title VARCHAR(20) NOT NULL, message TEXT, em STRING)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS fileImg(num INTEGER , filePath STRING)");
 
     }
 

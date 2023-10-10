@@ -2,6 +2,7 @@ package com.hunstory.tpemptyoutworryjh2023.adapter;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
 
 public class RecyclerForInFragmentAdapter extends RecyclerView.Adapter<RecyclerForInFragmentAdapter.VH> {
     Context context;
-    ArrayList<SelectedImageData> imgList;
+    ArrayList<String> uriList;
 
-    public RecyclerForInFragmentAdapter(Context context, ArrayList<SelectedImageData> imgList) {
+    public RecyclerForInFragmentAdapter(Context context, ArrayList<String> uriList) {
         this.context = context;
-        this.imgList = imgList;
+        this.uriList = uriList;
     }
 
     @NonNull
@@ -34,13 +35,13 @@ public class RecyclerForInFragmentAdapter extends RecyclerView.Adapter<RecyclerF
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        SelectedImageData imageData = imgList.get(position);
-        Glide.with(context).load(imageData.imagePath).into(holder.binding.iv);
+        String imagePath = uriList.get(position);
+        Glide.with(context).load(imagePath).into(holder.binding.iv);
     }
 
     @Override
     public int getItemCount() {
-        return imgList.size();
+        return uriList.size();
     }
 
 

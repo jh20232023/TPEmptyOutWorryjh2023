@@ -1,18 +1,20 @@
 package com.hunstory.tpemptyoutworryjh2023.data;
 
+import java.util.ArrayList;
+
 public class NonMemberDatas {
     public String date;
     public String title;
     public String message;
     public String emotion;
-    public String filePath;
+    public ArrayList<String> imgPath;
 
-    public NonMemberDatas(String date, String title, String message, String emotion, String filePath) {
+    public NonMemberDatas(String date, String title, String message, String emotion, ArrayList<String> imgPath) {
         this.date = date;
         this.title = title;
         this.message = message;
         this.emotion = emotion;
-        this.filePath = filePath;
+        this.imgPath = imgPath;
     }
 
     public NonMemberDatas() {

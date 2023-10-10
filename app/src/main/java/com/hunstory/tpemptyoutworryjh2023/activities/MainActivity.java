@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = openOrCreateDatabase("my_database.db",MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS member(num INTEGER PRIMARY KEY AUTOINCREMENT, date STRING NOT NULL, title VARCHAR(20) NOT NULL, message TEXT, em STRING)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS fileImg(num INTEGER , filePath STRING)");
+        db.close();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, new StoryListFragment()).commit();

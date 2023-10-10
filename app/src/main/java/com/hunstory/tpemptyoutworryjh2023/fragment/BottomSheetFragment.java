@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,18 +47,15 @@ import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     BottomsheetLayoutBinding binding;
-    Intent intent;
-    String imageRealPath;
-    Uri uri;
-    // ArrayList<NonMemberDatas> memberDatas = new ArrayList<>();
      RecyclerForInFragmentAdapter adapter;
-     ArrayList<SelectedImageData> selectedImageData= new ArrayList<>();
      ArrayList<String> uriList = new ArrayList<>();
-    String pickImg;
     int isAnimating=1;
     AnimatorSet animatorSet = new AnimatorSet();
     MyDatabaseHelper myDatabaseHelper;
     SQLiteDatabase sqLiteDatabase;
+    int type = 3;
+    int postingCount;
+    ArrayList<SelectedImageData> selectedImageData = new ArrayList<>();
 
 
     @Nullable
@@ -80,18 +78,23 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         binding.emoji.setOnClickListener(view1 -> emojiSelect());
         binding.ivSelectImg.setOnClickListener(view1 -> selectImg());
         binding.btnPosting.setOnClickListener(view1 -> {
-            String title = binding.etTitle.getText().toString();
-            String message = binding.etMessage.getText().toString();
-            String emojiImg= binding.emoji.toString();
-            String date = binding.etDate.getText().toString();
-            String[] dates= new String[]{date,title,message,emojiImg};
 
-            sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)",dates);
-            sqLiteDatabase.close();
-            dismiss();
+                String title = binding.etTitle.getText().toString();
+                String message = binding.etMessage.getText().toString();
+                String emojiImg = type + "";
+                String date = binding.etDate.getText().toString();
+                String[] dates = new String[]{date, title, message, emojiImg};
+                postingCount++;
+                sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+                for (int i=0; i<selectedImageData.size();i++) {
+                    sqLiteDatabase.execSQL("INSERT INTO fileimg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
+                }
+                sqLiteDatabase.close();
+                dismiss();
+
 
         });
-        adapter = new RecyclerForInFragmentAdapter(getActivity(),selectedImageData);
+        adapter = new RecyclerForInFragmentAdapter(getActivity(),uriList);
         binding.recyclerviewInBotoomsheet.setAdapter(adapter);
 
     }
@@ -128,8 +131,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                 ClipData.Item item = clipData.getItemAt(i);
                 Uri uri = item.getUri();
                 // 절대경로 uri
-                uriList.add(i,getImagePath(uri));
-                selectedImageData.add(new SelectedImageData(uriList.get(i)));
+                String path = getImagePath(uri);
+                uriList.add(path);
+                selectedImageData.add(new SelectedImageData(path));
             }
                 adapter.notifyDataSetChanged();
         }
@@ -198,23 +202,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         }
     }
 
-
-    ArrayList<String> getRealPathFromUri(Uri uri){
-        String [] projection = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.MediaColumns.RELATIVE_PATH};
-        String orderBy = MediaStore.Images.Media.DATE_MODIFIED;
-        //
-        Cursor cursor = getActivity().getContentResolver().query(uri , projection, null , null , orderBy + " DESC");
-        //
-        String absolutePathOfImage;
-        ArrayList<String> ImagesList = new ArrayList<>();
-        int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        while (cursor.moveToNext()){
-            absolutePathOfImage = cursor.getString(columnIndexData);
-            ImagesList.add(absolutePathOfImage);
-
-        }
-        return ImagesList;
-    }
     private String getImagePath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
@@ -229,6 +216,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     void clickSmile(){
+        type = 1;
         isAnimating++;
         binding.emoji.setImageResource(R.drawable.smile);
 
@@ -260,6 +248,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         ani5.start();
     }
     void clickSoso(){
+        type =2;
         isAnimating++;
         binding.emoji.setImageResource(R.drawable.soso);
 
@@ -292,6 +281,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     }
     void clickNotbad(){
+        type = 3;
         isAnimating++;
         binding.emoji.setImageResource(R.drawable.notbad);
 
@@ -325,6 +315,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     }
     void clickSad(){
+        type = 4;
         isAnimating++;
         binding.emoji.setImageResource(R.drawable.sad);
 
@@ -357,6 +348,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     }
     void clickAngry(){
+        type = 5;
         isAnimating++;
         binding.emoji.setImageResource(R.drawable.angry);
 

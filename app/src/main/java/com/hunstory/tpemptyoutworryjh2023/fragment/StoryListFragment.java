@@ -2,8 +2,10 @@ package com.hunstory.tpemptyoutworryjh2023.fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
 import com.hunstory.tpemptyoutworryjh2023.adapter.StorylistCardViewAdapter;
 import com.hunstory.tpemptyoutworryjh2023.data.MyDatabaseHelper;
 import com.hunstory.tpemptyoutworryjh2023.data.NonMemberDatas;
@@ -30,9 +33,10 @@ public class StoryListFragment extends Fragment {
     FragmentStroylistBinding binding;
     BottomSheetFragment bottomSheetFragment;
     StorylistCardViewAdapter adapter;
-    MyDatabaseHelper myDatabaseHelper;
     SQLiteDatabase db;
     ArrayList<NonMemberDatas> nonMemberDatas = new ArrayList<>();
+    RecyclerForInFragmentAdapter recyclerForInFragmentAdapter;
+    // boolean isDataExist= false;
 
 
     @Nullable
@@ -45,6 +49,8 @@ public class StoryListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM");
         String formattedDate = dateFormat.format(currentDate);
@@ -62,23 +68,31 @@ public class StoryListFragment extends Fragment {
             });
         });
 
+            db = getActivity().openOrCreateDatabase("my_database.db", Context.MODE_PRIVATE, null);
+            Cursor cursor = db.rawQuery("SELECT * FROM member", null);
+            Cursor cursor1 = db.rawQuery("SELECT * FROM fileImg",null);
+            ArrayList<String> imgPathList = new ArrayList<>();
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                        String date = cursor.getString(1);
+                        String title = cursor.getString(2);
+                        String message = cursor.getString(3);
+                        String em = cursor.getString(4);
+                        nonMemberDatas.add(new NonMemberDatas(date, title, message, em, null));
+                } // while..
+            } // if..
 
 
 
-        myDatabaseHelper = new MyDatabaseHelper(getContext());
-        db = myDatabaseHelper.getWritableDatabase();
-
-//        db.execSQL("SELECT my_database.db FROM member()");
-
-        binding.fab.setOnClickListener(view1 -> {clickFab();});
-        adapter = new StorylistCardViewAdapter();
+        adapter = new StorylistCardViewAdapter(nonMemberDatas,getContext());
         binding.cardviewStorylist.setAdapter(adapter);
-
+        binding.fab.setOnClickListener(view1 -> {clickFab();});
 
     }
     void clickFab(){
         bottomSheetFragment= new BottomSheetFragment();
         bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
+        adapter.notifyDataSetChanged();
 
     }
 }
