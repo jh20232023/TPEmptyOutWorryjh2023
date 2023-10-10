@@ -1,15 +1,11 @@
 package com.hunstory.tpemptyoutworryjh2023.fragment;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,8 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -30,10 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
@@ -42,8 +33,6 @@ import com.hunstory.tpemptyoutworryjh2023.data.SelectedImageData;
 import com.hunstory.tpemptyoutworryjh2023.databinding.BottomsheetLayoutBinding;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     BottomsheetLayoutBinding binding;
@@ -54,8 +43,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     MyDatabaseHelper myDatabaseHelper;
     SQLiteDatabase sqLiteDatabase;
     int type = 3;
-    int postingCount;
     ArrayList<SelectedImageData> selectedImageData = new ArrayList<>();
+    int postingCount=0;
+
 
 
     @Nullable
@@ -70,6 +60,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         myDatabaseHelper = new MyDatabaseHelper(getContext());
         sqLiteDatabase = myDatabaseHelper.getWritableDatabase();
+        postingCount++;
 
         binding.toolbar.setNavigationOnClickListener(view1 -> {
             dismiss();
@@ -78,19 +69,38 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         binding.emoji.setOnClickListener(view1 -> emojiSelect());
         binding.ivSelectImg.setOnClickListener(view1 -> selectImg());
         binding.btnPosting.setOnClickListener(view1 -> {
-
+                String date = binding.etDate.getText().toString();
                 String title = binding.etTitle.getText().toString();
                 String message = binding.etMessage.getText().toString();
                 String emojiImg = type + "";
-                String date = binding.etDate.getText().toString();
-                String[] dates = new String[]{date, title, message, emojiImg};
-                postingCount++;
-                sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
-                for (int i=0; i<selectedImageData.size();i++) {
-                    sqLiteDatabase.execSQL("INSERT INTO fileimg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
-                }
-                sqLiteDatabase.close();
-                dismiss();
+
+
+                Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM fileImg",null);
+                if (cursor.getCount()>0) {
+                    cursor.moveToLast();
+                    int cursorCount = cursor.getInt(0);
+                    postingCount = postingCount + cursorCount;
+
+                    String[] dates = new String[]{date, title, message, emojiImg};
+                    sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+                    for (int i=0; i<selectedImageData.size();i++) {
+                        sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
+                    } // for..
+                    sqLiteDatabase.close();
+                    dismiss();
+
+                } else {
+                    String[] dates = new String[]{date, title, message, emojiImg};
+                    sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+                    for (int i=0; i<selectedImageData.size();i++) {
+                        sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
+                    } // for..
+                    sqLiteDatabase.close();
+                    dismiss();
+                } // else..
+
+
+
 
 
         });

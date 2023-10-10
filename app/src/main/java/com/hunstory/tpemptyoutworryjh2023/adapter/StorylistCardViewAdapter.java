@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCardViewAdapter.VH> {
     ArrayList<NonMemberDatas> nonMemberDatas;
     Context context;
-    RecyclerForInFragmentAdapter adapter;
+    RecyclerInRecyclerForAdapter adapter;
 
     public StorylistCardViewAdapter(ArrayList<NonMemberDatas> nonMemberDatas, Context context) {
         this.nonMemberDatas = nonMemberDatas;
@@ -55,7 +55,7 @@ public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCard
             case 5+"" : Glide.with(context).load(R.drawable.angry).into(holder.binding.emoji);
             break;
         }
-        adapter = new RecyclerForInFragmentAdapter(context,datas.imgPath);
+        adapter = new RecyclerInRecyclerForAdapter(context,datas.imgPath);
         holder.binding.recyclerviewStorylist.setAdapter(adapter);
         holder.binding.recyclerviewStorylist.setVisibility(View.VISIBLE);
     }

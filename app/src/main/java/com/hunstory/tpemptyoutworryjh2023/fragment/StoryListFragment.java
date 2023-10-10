@@ -67,32 +67,35 @@ public class StoryListFragment extends Fragment {
                 }
             });
         });
-
-            db = getActivity().openOrCreateDatabase("my_database.db", Context.MODE_PRIVATE, null);
-            Cursor cursor = db.rawQuery("SELECT * FROM member", null);
-            Cursor cursor1 = db.rawQuery("SELECT * FROM fileImg",null);
-            ArrayList<String> imgPathList = new ArrayList<>();
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                        String date = cursor.getString(1);
-                        String title = cursor.getString(2);
-                        String message = cursor.getString(3);
-                        String em = cursor.getString(4);
-                        nonMemberDatas.add(new NonMemberDatas(date, title, message, em, null));
-                } // while..
-            } // if..
-
-
-
-        adapter = new StorylistCardViewAdapter(nonMemberDatas,getContext());
-        binding.cardviewStorylist.setAdapter(adapter);
         binding.fab.setOnClickListener(view1 -> {clickFab();});
+        db = getActivity().openOrCreateDatabase("my_database.db", Context.MODE_PRIVATE, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM member", null);
+        ArrayList<String> imgPathList = new ArrayList<>();
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int memberNum = cursor.getInt(0);
+                Cursor fileImgCurser = db.rawQuery("SELECT * FROM fileImg WHERE num = '"+memberNum+"'",null);
+
+                String date = cursor.getString(1);
+                String title = cursor.getString(2);
+                String message = cursor.getString(3);
+                String em = cursor.getString(4);
+                    if (fileImgCurser != null){
+                        while (fileImgCurser.moveToNext()){
+                            imgPathList.add(fileImgCurser.getString(1));
+                        }
+                    }
+                    nonMemberDatas.add(new NonMemberDatas(date,title,message,em,imgPathList));
+                    adapter = new StorylistCardViewAdapter(nonMemberDatas,getContext());
+                    binding.cardviewStorylist.setAdapter(adapter);
+            } // while..
+        } // if..
+
 
     }
     void clickFab(){
         bottomSheetFragment= new BottomSheetFragment();
         bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
-        adapter.notifyDataSetChanged();
-
     }
 }
