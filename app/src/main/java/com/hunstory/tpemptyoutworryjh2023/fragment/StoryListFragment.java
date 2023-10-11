@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,8 +36,8 @@ public class StoryListFragment extends Fragment {
     StorylistCardViewAdapter adapter;
     SQLiteDatabase db;
     ArrayList<NonMemberDatas> nonMemberDatas = new ArrayList<>();
-    RecyclerForInFragmentAdapter recyclerForInFragmentAdapter;
-    // boolean isDataExist= false;
+    int memberNum = 0;
+
 
 
     @Nullable
@@ -49,7 +50,8 @@ public class StoryListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        adapter = new StorylistCardViewAdapter(nonMemberDatas, getContext());
+        binding.cardviewStorylist.setAdapter(adapter);
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM");
@@ -70,30 +72,37 @@ public class StoryListFragment extends Fragment {
         binding.fab.setOnClickListener(view1 -> {clickFab();});
         db = getActivity().openOrCreateDatabase("my_database.db", Context.MODE_PRIVATE, null);
         Cursor cursor = db.rawQuery("SELECT * FROM member", null);
-        ArrayList<String> imgPathList = new ArrayList<>();
+
 
         if (cursor != null) {
+
+
             while (cursor.moveToNext()) {
-                int memberNum = cursor.getInt(0);
-                Cursor fileImgCurser = db.rawQuery("SELECT * FROM fileImg WHERE num = '"+memberNum+"'",null);
+                ArrayList<String> imgPathList = new ArrayList<>();
+                memberNum++;
+                Cursor fileImgCursor = db.rawQuery("SELECT * FROM fileImg WHERE num = '"+memberNum+"'",null);
 
                 String date = cursor.getString(1);
                 String title = cursor.getString(2);
                 String message = cursor.getString(3);
                 String em = cursor.getString(4);
-                    if (fileImgCurser != null){
-                        while (fileImgCurser.moveToNext()){
-                            imgPathList.add(fileImgCurser.getString(1));
-                        }
+
+                NonMemberDatas datas= new NonMemberDatas(date, title, message, em, new ArrayList<String>());
+
+                if (fileImgCursor != null) {
+                    while (fileImgCursor.moveToNext()) {
+                        datas.imgPath.add(fileImgCursor.getString(1));
                     }
-                    nonMemberDatas.add(new NonMemberDatas(date,title,message,em,imgPathList));
-                    adapter = new StorylistCardViewAdapter(nonMemberDatas,getContext());
-                    binding.cardviewStorylist.setAdapter(adapter);
-            } // while..
+                }
+
+                nonMemberDatas.add(datas);
+                adapter.notifyDataSetChanged();
+            }// while..
         } // if..
 
-
     }
+
+
     void clickFab(){
         bottomSheetFragment= new BottomSheetFragment();
         bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());

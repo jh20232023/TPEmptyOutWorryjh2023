@@ -17,12 +17,11 @@ import java.util.ArrayList;
 
 public class RecyclerInRecyclerForAdapter extends RecyclerView.Adapter<RecyclerInRecyclerForAdapter.VH> {
     Context context;
-    ArrayList<String> uriList;
-    ArrayList<NonMemberDatas> nonMemberDatas;
+    ArrayList<String> imgPath;
 
-    public RecyclerInRecyclerForAdapter(Context context, ArrayList<String> uriList) {
+    public RecyclerInRecyclerForAdapter(Context context, ArrayList<String> imgPath) {
         this.context = context;
-        this.uriList = uriList;
+        this.imgPath = imgPath;
     }
 
     @NonNull
@@ -34,14 +33,17 @@ public class RecyclerInRecyclerForAdapter extends RecyclerView.Adapter<RecyclerI
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        String imagePath = uriList.get(position);
-        Glide.with(context).load(imagePath).into(holder.binding.iv);
-    }
+        String path = imgPath.get(position);
+        Glide.with(context).load(path).into(holder.binding.iv);
 
+
+    }
     @Override
     public int getItemCount() {
-        return uriList.size();
+        return imgPath.size();
     }
+
+
 
 
     class VH extends RecyclerView.ViewHolder {
