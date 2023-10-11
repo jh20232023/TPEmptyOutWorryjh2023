@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CreateProfileTheme" parent="Theme.AppCompat.Light">
+
+        <item name="android:textSize">20sp</item>
+
+        <item name="cornerSize">16dp</item>
+
+        <item name="windowActionBar">false</item>
+
+        <item name="windowNoTitle">true</item>
+
+        <item name="fontFamily">@font/notosansbold</item>
+
+    </style>
+</resources>
