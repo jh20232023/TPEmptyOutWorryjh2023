@@ -68,6 +68,7 @@ public class StoryListFragment extends Fragment {
                 currentYear--;
                 binding.date.setText(currentYear+"/"+currentMonth);
             }
+                nonMemberDatas.clear();
                 createDataBaseAndAdapter();
         });
         binding.ivForward.setOnClickListener(view1 -> {
@@ -78,6 +79,7 @@ public class StoryListFragment extends Fragment {
                 currentYear++;
                 binding.date.setText(currentYear + "/" + currentMonth);
             }
+                nonMemberDatas.clear();
                 createDataBaseAndAdapter();
 
         });
@@ -89,21 +91,23 @@ public class StoryListFragment extends Fragment {
                 binding.date.setText(year+"/"+month);
                 currentMonth = month;
                 currentYear = year;
-                adapter.notifyDataSetChanged();
+                nonMemberDatas.clear();
+                createDataBaseAndAdapter();
+
                 }});
                 dialog.show(getActivity().getSupportFragmentManager(), getTag());
             });
 
         binding.fab.setOnClickListener(view1 -> {clickFab();});
-
         createDataBaseAndAdapter();
     } // onViewCreated..
     void createDataBaseAndAdapter(){
+        dateFilter = (currentYear-2000)+"/"+currentMonth+"%";
         db = getActivity().openOrCreateDatabase("my_database.db", Context.MODE_PRIVATE, null);
         Cursor cursor = db.rawQuery("SELECT * FROM member WHERE date LIKE '"+dateFilter+"'", null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                memberNum++;
+                memberNum = cursor.getInt(0);
                 Cursor fileImgCursor = db.rawQuery("SELECT * FROM fileImg WHERE num = '"+memberNum+"'",null);
 
                 String date = cursor.getString(1);
