@@ -98,14 +98,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                     sqLiteDatabase.close();
                     dismiss();
                 } // else..
-
-
-
-
-
         });
         adapter = new RecyclerForInFragmentAdapter(getActivity(),uriList);
         binding.recyclerviewInBotoomsheet.setAdapter(adapter);
+        binding.recyclerviewInBotoomsheet.setVisibility(View.VISIBLE);
 
     }
     void clickDate() {

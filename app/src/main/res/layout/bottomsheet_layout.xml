@@ -156,9 +156,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/bg_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/layout_emoji">
         <ImageView
             android:id="@+id/iv_select_img"
@@ -184,12 +185,14 @@
             android:padding="8dp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_in_botoomsheet"
+            android:visibility="gone"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/et_message"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"/>

@@ -4,17 +4,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.data.NonMemberDatas;
 import com.hunstory.tpemptyoutworryjh2023.databinding.CardviewStorylistBinding;
+import com.hunstory.tpemptyoutworryjh2023.fragment.BottomSheetFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCard
     ArrayList<NonMemberDatas> nonMemberDatas;
     Context context;
     RecyclerInRecyclerForAdapter adapter;
+    BottomSheetFragment bottomSheetFragment;
 
     public StorylistCardViewAdapter(ArrayList<NonMemberDatas> nonMemberDatas, Context context) {
         this.nonMemberDatas = nonMemberDatas;
@@ -55,10 +59,10 @@ public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCard
             case 5+"" : Glide.with(context).load(R.drawable.angry).into(holder.binding.emoji);
             break;
         }
-
         adapter = new RecyclerInRecyclerForAdapter(context,datas.imgPath);
         holder.binding.recyclerviewStorylist.setAdapter(adapter);
         holder.binding.recyclerviewStorylist.setVisibility(View.VISIBLE);
+
     }
 
     @Override

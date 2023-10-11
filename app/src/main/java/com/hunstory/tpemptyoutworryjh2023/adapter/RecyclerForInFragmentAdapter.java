@@ -29,7 +29,7 @@ public class RecyclerForInFragmentAdapter extends RecyclerView.Adapter<RecyclerF
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.recycler_in_fragment_storylist,parent,false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.recycler_in_bottomsheet,parent,false);
         return new VH(itemView);
     }
 
