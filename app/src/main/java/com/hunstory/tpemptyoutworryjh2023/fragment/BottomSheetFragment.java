@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -31,11 +32,15 @@ import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
 import com.hunstory.tpemptyoutworryjh2023.data.MyDatabaseHelper;
 import com.hunstory.tpemptyoutworryjh2023.data.SelectedImageData;
 import com.hunstory.tpemptyoutworryjh2023.databinding.BottomsheetLayoutBinding;
+import com.hunstory.tpemptyoutworryjh2023.network.G;
 import com.hunstory.tpemptyoutworryjh2023.network.RetrofitHelper;
 import com.hunstory.tpemptyoutworryjh2023.network.RetrofitService;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
@@ -74,13 +79,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         binding.recyclerviewInBotoomsheet.setAdapter(adapter);
         binding.recyclerviewInBotoomsheet.setVisibility(View.VISIBLE);
 
-        Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-
-
-
-
-
     }
     void clickPostingBtn(){
         String date = binding.etDate.getText().toString();
@@ -88,29 +86,61 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         String message = binding.etMessage.getText().toString();
         String emojiImg = type + "";
 
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM fileImg",null);
-        if (cursor.getCount()>0) {
-            cursor.moveToLast();
-            int cursorCount = cursor.getInt(0);
-            postingCount = postingCount + cursorCount;
+        if (!G.email.equals("guest")) {
+            Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+            retrofitService.insertDBText(date, title, message, emojiImg).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    dismiss();
+                }
 
-            String[] dates = new String[]{date, title, message, emojiImg};
-            sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
-            for (int i=0; i<selectedImageData.size();i++) {
-                sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
-            } // for..
-            sqLiteDatabase.close();
-            dismiss();
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(getActivity(), "게시물 저장에 실패했습니다. 다시시도해주세요", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-        } else {
-            String[] dates = new String[]{date, title, message, emojiImg};
-            sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
-            for (int i=0; i<selectedImageData.size();i++) {
-                sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
-            } // for..
-            sqLiteDatabase.close();
-            dismiss();
-        } // else..
+            for (int i= 0; i<uriList.size(); i++) {
+                retrofitService.insertDBImagePath(date, uriList.get(i)).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+            }
+        }
+
+        if (G.email.equals("guest")) {
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM fileImg", null);
+            if (cursor.getCount() > 0) {
+                cursor.moveToLast();
+                int cursorCount = cursor.getInt(0);
+                postingCount = postingCount + cursorCount;
+
+                String[] dates = new String[]{date, title, message, emojiImg};
+                sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+                for (int i = 0; i < selectedImageData.size(); i++) {
+                    sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" + postingCount + "','" + uriList.get(i) + "')");
+                } // for..
+                sqLiteDatabase.close();
+                dismiss();
+
+            } else {
+                String[] dates = new String[]{date, title, message, emojiImg};
+                sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+                for (int i = 0; i < selectedImageData.size(); i++) {
+                    sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" + postingCount + "','" + uriList.get(i) + "')");
+                } // for..
+                sqLiteDatabase.close();
+                dismiss();
+            } // else..
+        }
     }
     void clickDate() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());

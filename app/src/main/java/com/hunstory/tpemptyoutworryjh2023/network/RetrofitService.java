@@ -42,8 +42,14 @@ public interface RetrofitService {
     @POST("TPEmptyOutWorry/signin.php")
     Call<String> signIn(@Field("id") String id, @Field("pw") String pw);
 
-    @GET("TPEmptyOutWorry/insertDBtext.php")
+    @GET("TPEmptyOutWorry/insertDBText.php")
     Call<String> insertDBText(@Query("date") String date, @Query("title") String title, @Query("message") String message, @Query("em") String em);
+
+    @GET("TPEmptyOutWorry/insertDBImagePath.php")
+    // Call<String> 인데 int no Query 해도 되는 지...
+    Call<String> insertDBImagePath(@Query("date")String date,@Query("imagePath")String imagePath);
+    @GET("TPEmptyOutWorry/loadDBToNo.php")
+    Call<Integer> loadDBToNo(@Query("no") Integer no);
 }
 //
 //
