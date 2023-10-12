@@ -9,7 +9,7 @@
         android:layout_height="50dp"
         android:background="#656b5d"
         android:fontFamily="@font/notosansbold"
-        android:text="     감정 버리기"
+        android:text="     감정 비우기"
         android:textSize="16sp"
         android:textColor="@color/white"/>
     <LinearLayout
@@ -73,7 +73,7 @@
         android:layout_below="@id/layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="버리고 싶은 감정을 선택 하세요!"
+        android:text="비우고 싶은 감정을 선택 하세요!"
         android:layout_centerHorizontal="true"
         android:textSize="18sp"
         android:fontFamily="@font/notosansbold"
@@ -95,9 +95,15 @@
         android:layout_marginTop="160dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/rrremovebg"/>
-
-
-
-
-
+    <TextView
+        android:id="@+id/tv_emotion_count"
+        android:layout_below="@id/iv_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/notosansbold"
+        android:textSize="22sp"
+        android:visibility="gone"
+        android:includeFontPadding="false"
+        android:text="남은 용량 : 100"/>
 </RelativeLayout>

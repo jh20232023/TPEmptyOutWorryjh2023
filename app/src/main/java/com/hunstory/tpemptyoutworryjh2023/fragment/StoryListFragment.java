@@ -45,8 +45,6 @@ public class StoryListFragment extends Fragment {
     int currentMonth = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 실제 월 값에 +1 해야합니다.
     String dateFilter = (currentYear-2000)+"/"+currentMonth+"%";
 
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,6 +99,11 @@ public class StoryListFragment extends Fragment {
         binding.fab.setOnClickListener(view1 -> {clickFab();});
         createDataBaseAndAdapter();
     } // onViewCreated..
+
+
+
+
+
     void createDataBaseAndAdapter(){
         dateFilter = (currentYear-2000)+"/"+currentMonth+"%";
         db = getActivity().openOrCreateDatabase("my_database.db", Context.MODE_PRIVATE, null);

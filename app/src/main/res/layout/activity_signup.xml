@@ -31,7 +31,7 @@
         android:hint="E-mail">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="300dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -44,7 +44,7 @@
         android:hint="비밀번호">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="300dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:inputType="textPassword"
             />
@@ -58,7 +58,7 @@
         android:hint="비밀번호 재확인">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="300dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:inputType="textPassword"
             />
@@ -72,7 +72,7 @@
         android:hint="닉네임">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="300dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:inputType="text"
             />
@@ -84,7 +84,7 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="240dp"
+        android:layout_marginBottom="200dp"
         android:text="회 원 가 입"
         android:fontFamily="@font/notosansbold"
         android:textSize="13sp"

@@ -17,7 +17,7 @@
             android:layout_marginTop="11dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ninkname"
+            android:text="nickname"
             android:layout_toRightOf="@id/iv_profile"
             android:fontFamily="@font/notosansbold"
             android:layout_marginLeft="6dp" />
@@ -64,11 +64,11 @@
             android:layout_alignStart="@id/iv_favorite"
             android:fontFamily="@font/notosansbold"/>
         <TextView
-            android:id="@+id/tv_ninkname_under_like"
+            android:id="@+id/tv_nickname_under_like"
             android:layout_below="@id/tv_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ninkname"
+            android:text="nickname"
             android:textSize="11sp"
             android:fontFamily="@font/notosansbold"
             android:layout_alignLeft="@id/tv_like" />
@@ -81,14 +81,14 @@
             android:fontFamily="@font/notosanskr_reguler"
             android:textColor="@color/black"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/tv_ninkname_under_like"
+            android:layout_toRightOf="@id/tv_nickname_under_like"
             android:lines="2"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_ninkname_under_like"
+            android:layout_below="@id/tv_nickname_under_like"
             android:text="댓글 n개 모두 보기"
-            android:layout_alignLeft="@id/tv_ninkname_under_like"
+            android:layout_alignLeft="@id/tv_nickname_under_like"
             android:textColor="#FF888888"
             android:textSize="11sp"/>
 

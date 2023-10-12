@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.databinding.ActivityLoginBinding;
+import com.hunstory.tpemptyoutworryjh2023.network.G;
 
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                G.email = "guest";
                 finish();
             }
         }).create().show();
