@@ -31,8 +31,12 @@ import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
 import com.hunstory.tpemptyoutworryjh2023.data.MyDatabaseHelper;
 import com.hunstory.tpemptyoutworryjh2023.data.SelectedImageData;
 import com.hunstory.tpemptyoutworryjh2023.databinding.BottomsheetLayoutBinding;
+import com.hunstory.tpemptyoutworryjh2023.network.RetrofitHelper;
+import com.hunstory.tpemptyoutworryjh2023.network.RetrofitService;
 
 import java.util.ArrayList;
+
+import retrofit2.Retrofit;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     BottomsheetLayoutBinding binding;
@@ -61,51 +65,54 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         myDatabaseHelper = new MyDatabaseHelper(getContext());
         sqLiteDatabase = myDatabaseHelper.getWritableDatabase();
         postingCount++;
-
-        binding.toolbar.setNavigationOnClickListener(view1 -> {
-            dismiss();
-        });
+        binding.toolbar.setNavigationOnClickListener(view1 -> {dismiss();});
         binding.etDate.setOnClickListener(view1 -> clickDate());
         binding.emoji.setOnClickListener(view1 -> emojiSelect());
         binding.ivSelectImg.setOnClickListener(view1 -> selectImg());
-        binding.btnPosting.setOnClickListener(view1 -> {
-                String date = binding.etDate.getText().toString();
-                String title = binding.etTitle.getText().toString();
-                String message = binding.etMessage.getText().toString();
-                String emojiImg = type + "";
-
-
-                Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM fileImg",null);
-                if (cursor.getCount()>0) {
-                    cursor.moveToLast();
-                    int cursorCount = cursor.getInt(0);
-                    postingCount = postingCount + cursorCount;
-
-                    String[] dates = new String[]{date, title, message, emojiImg};
-                    sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
-                    for (int i=0; i<selectedImageData.size();i++) {
-                        sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
-                    } // for..
-                    sqLiteDatabase.close();
-                    dismiss();
-
-                } else {
-                    String[] dates = new String[]{date, title, message, emojiImg};
-                    sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
-                    for (int i=0; i<selectedImageData.size();i++) {
-                        sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
-                    } // for..
-                    sqLiteDatabase.close();
-                    dismiss();
-                } // else..
-        });
+        binding.btnPosting.setOnClickListener(view1 -> clickPostingBtn());
         adapter = new RecyclerForInFragmentAdapter(getActivity(),uriList);
         binding.recyclerviewInBotoomsheet.setAdapter(adapter);
         binding.recyclerviewInBotoomsheet.setVisibility(View.VISIBLE);
 
+        Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+
+
+
+
+    }
+    void clickPostingBtn(){
+        String date = binding.etDate.getText().toString();
+        String title = binding.etTitle.getText().toString();
+        String message = binding.etMessage.getText().toString();
+        String emojiImg = type + "";
+
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM fileImg",null);
+        if (cursor.getCount()>0) {
+            cursor.moveToLast();
+            int cursorCount = cursor.getInt(0);
+            postingCount = postingCount + cursorCount;
+
+            String[] dates = new String[]{date, title, message, emojiImg};
+            sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+            for (int i=0; i<selectedImageData.size();i++) {
+                sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
+            } // for..
+            sqLiteDatabase.close();
+            dismiss();
+
+        } else {
+            String[] dates = new String[]{date, title, message, emojiImg};
+            sqLiteDatabase.execSQL("INSERT INTO member(date, title, message, em) VALUES(?,?,?,?)", dates);
+            for (int i=0; i<selectedImageData.size();i++) {
+                sqLiteDatabase.execSQL("INSERT INTO fileImg(num, filePath) VALUES('" +postingCount+ "','"+uriList.get(i)+"')");
+            } // for..
+            sqLiteDatabase.close();
+            dismiss();
+        } // else..
     }
     void clickDate() {
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
         datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -116,15 +123,11 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             }
         });
         datePickerDialog.show();
-
-
     }
     void selectImg(){
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX,10);
         resultLauncher.launch(intent);
-
-
     }
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
