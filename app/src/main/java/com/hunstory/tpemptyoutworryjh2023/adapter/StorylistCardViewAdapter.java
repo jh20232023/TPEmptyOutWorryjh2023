@@ -26,7 +26,6 @@ public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCard
     ArrayList<NonMemberDatas> nonMemberDatas;
     Context context;
     RecyclerInRecyclerForAdapter adapter;
-    BottomSheetFragment bottomSheetFragment;
 
     public StorylistCardViewAdapter(ArrayList<NonMemberDatas> nonMemberDatas, Context context) {
         this.nonMemberDatas = nonMemberDatas;

@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
@@ -100,30 +101,31 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                 public void onResponse(Call<String> call, Response<String> response) {
                     String s = response.body();
                     G.no = s;
-                    dismiss();
+                    for (int i=0; i<uriList.size();i++) {
+                        File file = new File(uriList.get(i));
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"),file);
+                        MultipartBody.Part part =MultipartBody.Part.createFormData("image", file.getName(),requestBody);
+                        retrofitService.insertDBImagePath(G.no, G.email, date, part).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+                        dismiss();
+                    }
 
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    Toast.makeText(getActivity(), "게시물 저장에 실패했습니다. 다시시도해주세요", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getActivity(), "게시물 저장에 실패했습니다. 다시시도해주세요", Toast.LENGTH_SHORT).show();
                 }
             });
-            for (int i=0; i<uriList.size();i++) {
-                File file = new File(uriList.get(i));
-                RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"),file);
-                MultipartBody.Part part =MultipartBody.Part.createFormData("image", file.getName(),requestBody);
-                retrofitService.insertDBImagePath(G.email, date, part).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getActivity(), t+"", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
         }
 
         if (G.email.equals("guest")) {

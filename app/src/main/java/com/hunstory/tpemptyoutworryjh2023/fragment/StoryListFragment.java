@@ -1,5 +1,6 @@
 package com.hunstory.tpemptyoutworryjh2023.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.activities.MainActivity;
 import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
 import com.hunstory.tpemptyoutworryjh2023.adapter.StorylistCardViewAdapter;
+import com.hunstory.tpemptyoutworryjh2023.data.LoadDataImagePath;
+import com.hunstory.tpemptyoutworryjh2023.data.LoadDataText;
 import com.hunstory.tpemptyoutworryjh2023.data.MyDatabaseHelper;
 import com.hunstory.tpemptyoutworryjh2023.data.MyPicker;
 import com.hunstory.tpemptyoutworryjh2023.data.NonMemberDatas;
@@ -35,6 +38,7 @@ import com.hunstory.tpemptyoutworryjh2023.network.G;
 import com.hunstory.tpemptyoutworryjh2023.network.RetrofitHelper;
 import com.hunstory.tpemptyoutworryjh2023.network.RetrofitService;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,6 +82,7 @@ public class StoryListFragment extends Fragment {
                 currentYear--;
                 binding.date.setText(currentYear+"/"+currentMonth);
             }
+
                 nonMemberDatas.clear();
                 createDataBaseAndAdapter();
         });
@@ -89,6 +94,7 @@ public class StoryListFragment extends Fragment {
                 currentYear++;
                 binding.date.setText(currentYear + "/" + currentMonth);
             }
+
                 nonMemberDatas.clear();
                 createDataBaseAndAdapter();
 
@@ -101,9 +107,9 @@ public class StoryListFragment extends Fragment {
                 binding.date.setText(year+"/"+month);
                 currentMonth = month;
                 currentYear = year;
+
                 nonMemberDatas.clear();
                 createDataBaseAndAdapter();
-
                 }});
                 dialog.show(getActivity().getSupportFragmentManager(), getTag());
             });
@@ -111,10 +117,6 @@ public class StoryListFragment extends Fragment {
         binding.fab.setOnClickListener(view1 -> {clickFab();});
         createDataBaseAndAdapter();
     } // onViewCreated..
-
-
-
-
 
     void createDataBaseAndAdapter() {
         if (G.email.equals("guest")) {
@@ -146,19 +148,41 @@ public class StoryListFragment extends Fragment {
             if (!G.email.equals("guest")) {
                 Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
                 RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-                retrofitService.loadDBSPL(dateFilter,G.email).enqueue(new Callback<String>() {
+                retrofitService.loadDBSPL(dateFilter,G.email).enqueue(new Callback<ArrayList<LoadDataText>>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Gson gson = new Gson();
-                        String s = gson.toJson(response);
-                    }
+                    public void onResponse(Call<ArrayList<LoadDataText>> call, Response<ArrayList<LoadDataText>> response) {
+                        for (int i=0;i<response.body().size();i++){
+                            NonMemberDatas retrofitDatas = new NonMemberDatas(
+                                    response.body().get(i).date,
+                                    response.body().get(i).title,
+                                    response.body().get(i).message,
+                                    response.body().get(i).em,new ArrayList<String>());
+                                    G.no = response.body().get(i).no;
+                            retrofitService.loadDBSPLI(dateFilter, G.email).enqueue(new Callback<ArrayList<LoadDataImagePath>>() {
+                                @Override
+                                public void onResponse(Call<ArrayList<LoadDataImagePath>> call, Response<ArrayList<LoadDataImagePath>> response1) {
+                                    for (int i=0;i<response1.body().size();i++) {
+                                        if (response1.body().get(i).spl_no == G.no){
+                                            retrofitDatas.imgPath.add(response1.body().get(i).filePath);
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<ArrayList<LoadDataImagePath>> call, Throwable t) {
+
+                                }
+                            });
+                            nonMemberDatas.add(retrofitDatas);
+                            adapter.notifyDataSetChanged();
+                        } // for 문 ex) 10월달의 포스팅 개수만큼 반복...
+                    } // loadDBSPL onResponse...
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                    public void onFailure(Call<ArrayList<LoadDataText>> call, Throwable t) {
+
+                    } // loadDBSPL onFailure...
+                }); // loadDBSPL..
+            }//is not guest?
     }// createDataBaseAndAdapter method..
     void clickFab(){
         bottomSheetFragment= new BottomSheetFragment();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.data.NonMemberDatas;
 import com.hunstory.tpemptyoutworryjh2023.databinding.RecyclerInFragmentStorylistBinding;
+import com.hunstory.tpemptyoutworryjh2023.network.G;
 
 import java.util.ArrayList;
 
@@ -33,10 +35,13 @@ public class RecyclerInRecyclerForAdapter extends RecyclerView.Adapter<RecyclerI
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        String path = imgPath.get(position);
+        if (!G.email.equals("guest")){
+        String path = "http://jh2023.dothome.co.kr/TPEmptyOutWorry" + imgPath.get(position);
         Glide.with(context).load(path).into(holder.binding.iv);
-
-
+        } else if (G.email.equals("guest")) {
+            String path = imgPath.get(position);
+            Glide.with(context).load(path).override(200,200).into(holder.binding.iv);
+        }
     }
     @Override
     public int getItemCount() {
