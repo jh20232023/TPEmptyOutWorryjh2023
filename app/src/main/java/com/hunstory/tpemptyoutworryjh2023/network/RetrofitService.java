@@ -16,6 +16,7 @@ import androidx.loader.content.CursorLoader;
 import com.bumptech.glide.Glide;
 import com.hunstory.tpemptyoutworryjh2023.data.LoadDataImagePath;
 import com.hunstory.tpemptyoutworryjh2023.data.LoadDataText;
+import com.hunstory.tpemptyoutworryjh2023.data.NonMemberDatas;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,11 +51,11 @@ public interface RetrofitService {
 
     @Multipart
     @POST("TPEmptyOutWorry/insertDBImagePath.php")
-    Call<String> insertDBImagePath(@Part("no") String no, @Part("id") String id, @Part("date")String date,@Part MultipartBody.Part imagePath);
+    Call<String> insertDBImagePath(@Part("spl_no") String no , @Part MultipartBody.Part imagePath);
 
      @GET("TPEmptyOutWorry/loadDBText.php")
-     Call<ArrayList<LoadDataText>> loadDBSPL(@Query("date") String date, @Query("id") String id);
+     Call<ArrayList<NonMemberDatas>> loadDBSPL(@Query("date") String date, @Query("id") String id);
     @GET("TPEmptyOutWorry/loadDBImagePath.php")
-    Call<ArrayList<LoadDataImagePath>> loadDBSPLI(@Query("date") String date, @Query("id") String id);
+    Call<ArrayList<LoadDataImagePath>> loadDBSPLI(@Query("no") String no);
 
 }

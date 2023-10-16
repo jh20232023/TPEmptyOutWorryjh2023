@@ -1,6 +1,7 @@
 package com.hunstory.tpemptyoutworryjh2023.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +37,12 @@ public class RecyclerInRecyclerForAdapter extends RecyclerView.Adapter<RecyclerI
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         if (!G.email.equals("guest")){
-        String path = "http://jh2023.dothome.co.kr/TPEmptyOutWorry" + imgPath.get(position);
+        String path = "http://jh2023.dothome.co.kr/TPEmptyOutWorry/" + imgPath.get(position);
+            Log.i("path",path);
         Glide.with(context).load(path).into(holder.binding.iv);
         } else if (G.email.equals("guest")) {
             String path = imgPath.get(position);
-            Glide.with(context).load(path).override(200,200).into(holder.binding.iv);
+            Glide.with(context).load(path).into(holder.binding.iv);
         }
     }
     @Override

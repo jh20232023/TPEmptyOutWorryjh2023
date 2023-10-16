@@ -146,44 +146,70 @@ public class StoryListFragment extends Fragment {
             }//if..
         }// if is guest?
             if (!G.email.equals("guest")) {
+                dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
                 Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
                 RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-                retrofitService.loadDBSPL(dateFilter,G.email).enqueue(new Callback<ArrayList<LoadDataText>>() {
+                retrofitService.loadDBSPL(dateFilter,G.email).enqueue(new Callback<ArrayList<NonMemberDatas>>() {
                     @Override
-                    public void onResponse(Call<ArrayList<LoadDataText>> call, Response<ArrayList<LoadDataText>> response) {
+                    public void onResponse(Call<ArrayList<NonMemberDatas>> call, Response<ArrayList<NonMemberDatas>> response) {
                         for (int i=0;i<response.body().size();i++){
                             NonMemberDatas retrofitDatas = new NonMemberDatas(
                                     response.body().get(i).date,
                                     response.body().get(i).title,
                                     response.body().get(i).message,
-                                    response.body().get(i).em,new ArrayList<String>());
-                                    G.no = response.body().get(i).no;
-                            retrofitService.loadDBSPLI(dateFilter, G.email).enqueue(new Callback<ArrayList<LoadDataImagePath>>() {
-                                @Override
-                                public void onResponse(Call<ArrayList<LoadDataImagePath>> call, Response<ArrayList<LoadDataImagePath>> response1) {
-                                    for (int i=0;i<response1.body().size();i++) {
-                                        if (response1.body().get(i).spl_no == G.no){
-                                            retrofitDatas.imgPath.add(response1.body().get(i).filePath);
-                                        }
-                                    }
-                                }
-                                @Override
-                                public void onFailure(Call<ArrayList<LoadDataImagePath>> call, Throwable t) {
+                                    response.body().get(i).em,
+                                    new ArrayList<String>());
 
-                                }
-                            });
+                            retrofitDatas.no=response.body().get(i).no;
                             nonMemberDatas.add(retrofitDatas);
                             adapter.notifyDataSetChanged();
                         } // for 문 ex) 10월달의 포스팅 개수만큼 반복...
+
+                        loadDataImgPath();
+
                     } // loadDBSPL onResponse...
 
                     @Override
-                    public void onFailure(Call<ArrayList<LoadDataText>> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<NonMemberDatas>> call, Throwable t) {
 
                     } // loadDBSPL onFailure...
                 }); // loadDBSPL..
             }//is not guest?
     }// createDataBaseAndAdapter method..
+        void loadDataImgPath(){
+
+            // Log.i("testtt","void");
+
+
+
+            for(NonMemberDatas data : nonMemberDatas){
+
+                // Log.i("testtt","bbb"+data.no);
+
+                Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
+                RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+                retrofitService.loadDBSPLI(data.no).enqueue(new Callback<ArrayList<LoadDataImagePath>>() {
+                   @Override
+                   public void onResponse(Call<ArrayList<LoadDataImagePath>> call, Response<ArrayList<LoadDataImagePath>> response) {
+                       ArrayList<LoadDataImagePath> paths= response.body();
+                       // Log.i("testtt",paths.size()+"");
+
+                       for(LoadDataImagePath path: paths){
+                           // Log.i("testtt","a :"+path.imgPath);
+                           data.imgPath.add(path.imgPath);
+                       }
+
+                       adapter.notifyDataSetChanged();
+                   }
+                   @Override
+                   public void onFailure(Call<ArrayList<LoadDataImagePath>> call, Throwable t) {
+                       // Log.i("error",t.getMessage());
+
+                   }
+               });
+            }
+
+    }
     void clickFab(){
         bottomSheetFragment= new BottomSheetFragment();
         bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());

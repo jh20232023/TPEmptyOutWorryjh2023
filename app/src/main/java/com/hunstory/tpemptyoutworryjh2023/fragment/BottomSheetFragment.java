@@ -99,18 +99,17 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             retrofitService.insertDBText(G.email, date, title, message, emojiImg).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    String s = response.body();
-                    G.no = s;
+                    G.no = response.body();
+
                     for (int i=0; i<uriList.size();i++) {
                         File file = new File(uriList.get(i));
                         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"),file);
                         MultipartBody.Part part =MultipartBody.Part.createFormData("image", file.getName(),requestBody);
-                        retrofitService.insertDBImagePath(G.no, G.email, date, part).enqueue(new Callback<String>() {
+                        retrofitService.insertDBImagePath(G.no, part).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
 
                             }
-
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
 
@@ -118,7 +117,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                         });
                         dismiss();
                     }
-
                 }
 
                 @Override

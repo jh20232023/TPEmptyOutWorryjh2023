@@ -51,6 +51,7 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "회원이 되신걸 축하합니다.", Toast.LENGTH_SHORT).show();
                     finish();
 
+
                 }
 
                 @Override

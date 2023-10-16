@@ -3,6 +3,7 @@ package com.hunstory.tpemptyoutworryjh2023.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +47,7 @@ public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCard
         holder.binding.tvTitle.setText("제목 : "+datas.title);
         holder.binding.tvMessage.setText(datas.message);
 
-        switch (datas.emotion){
+        switch (datas.em){
             case 1+"" : Glide.with(context).load(R.drawable.smile).into(holder.binding.emoji);
             break;
             case 2+"" : Glide.with(context).load(R.drawable.notbad).into(holder.binding.emoji);
@@ -58,6 +59,7 @@ public class StorylistCardViewAdapter extends RecyclerView.Adapter<StorylistCard
             case 5+"" : Glide.with(context).load(R.drawable.angry).into(holder.binding.emoji);
             break;
         }
+        Log.i("dataPath",datas.imgPath.size()+"");
         adapter = new RecyclerInRecyclerForAdapter(context,datas.imgPath);
         holder.binding.recyclerviewStorylist.setAdapter(adapter);
         holder.binding.recyclerviewStorylist.setVisibility(View.VISIBLE);

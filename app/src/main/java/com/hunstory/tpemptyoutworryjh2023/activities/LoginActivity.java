@@ -24,6 +24,15 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvGuest.setOnClickListener(view -> clickGuestLogin());
         binding.tvLoginSignup.setOnClickListener(view -> clickMemberSignup());
         binding.tvEmail.setOnClickListener(view -> clickEmailLogin());
+        binding.ivKakao.setOnClickListener(view -> {
+            Toast.makeText(LoginActivity.this, "기능 업데이트 예정입니다.", Toast.LENGTH_SHORT).show();
+        });
+        binding.ivGoogle.setOnClickListener(view -> {
+            Toast.makeText(LoginActivity.this, "기능 업데이트 예정입니다.", Toast.LENGTH_SHORT).show();
+        });
+        binding.ivNaver.setOnClickListener(view -> {
+            Toast.makeText(LoginActivity.this, "기능 업데이트 예정입니다.", Toast.LENGTH_SHORT).show();
+        });
 
 
 

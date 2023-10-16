@@ -57,6 +57,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                     binding.inputLayoutId.getEditText().requestFocus();
                     binding.inputLayoutId.getEditText().selectAll();
                 }
+
             }
 
             @Override
