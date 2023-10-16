@@ -10,8 +10,8 @@ android {
         applicationId = "com.hunstory.tpemptyoutworryjh2023"
         minSdk = 26
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,9 +27,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
             }
     buildFeatures {
-        viewBinding = true
-    }
-    buildFeatures{
         viewBinding = true
     }
 
