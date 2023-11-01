@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity {
         String nickName =binding.inputLayoutNinkname.getEditText().getText().toString();
 
         if (!pw.equals(pwConfirm)) {
-            new AlertDialog.Builder(this).setMessage("비밀번호 확인에 문제가 있습니다. 다시 확인하여 입력해주시기 바랍니다.").create().show();
+            Toast.makeText(this, "비밀번호가 일치하지 않습니다. 다시 확인해 주세요.", Toast.LENGTH_SHORT).show();
             binding.inputLayoutPWConfirm.getEditText().requestFocus();
             binding.inputLayoutPWConfirm.getEditText().selectAll();
             return;
@@ -48,12 +48,16 @@ public class SignupActivity extends AppCompatActivity {
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    Toast.makeText(SignupActivity.this, "회원이 되신걸 축하합니다.", Toast.LENGTH_SHORT).show();
-                    finish();
-
-
+                    String s = response.body();
+                    if (response.body().equals("성공")) {
+                        Toast.makeText(SignupActivity.this, "회원이 되신걸 축하합니다.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (s.equals("id")){
+                        Toast.makeText(SignupActivity.this, "중복된 id 가 이미 존재합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+                    } else if (s.equals("nickName")) {
+                        Toast.makeText(SignupActivity.this, "중복된 닉네임이 이미 존재합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(SignupActivity.this, "회원가입에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();

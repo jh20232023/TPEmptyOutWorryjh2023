@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="70dp">
+
+    <ImageView
+        android:layout_width="56dp"
+        android:layout_height="70dp"
+        android:src="@drawable/aaaa"
+        android:adjustViewBounds="true"/>
+    <TextView
+        android:id="@+id/tv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosansbold"
+        android:includeFontPadding="false"
+        android:textSize="8sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/white"
+        android:text="월"/>
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosansbold"
+        android:includeFontPadding="false"
+        android:textSize="8sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="4dp"
+        android:text="12"/>
+    <ImageView
+        android:id="@+id/emoji"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/angry"/>
+
+</RelativeLayout>

@@ -100,7 +100,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     G.no = response.body();
-
                     for (int i=0; i<uriList.size();i++) {
                         File file = new File(uriList.get(i));
                         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"),file);
@@ -121,7 +120,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    // Toast.makeText(getActivity(), "게시물 저장에 실패했습니다. 다시시도해주세요", Toast.LENGTH_SHORT).show();
                 }
             });
         }

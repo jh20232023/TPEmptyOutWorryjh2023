@@ -1,15 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <CalendarView
-        android:id="@+id/cv"
+    <RelativeLayout
+        android:id="@+id/layout_relative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#656b5d"/>
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#656b5d"
+            android:text="2023-09"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/notosansbold"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+        <ImageView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:layout_toLeftOf="@id/date"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:layout_marginRight="30dp"/>
+        <ImageView
+            android:id="@+id/iv_forward"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_forward_24"
+            android:layout_toRightOf="@id/date"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_below="@id/layout_relative"
         android:layout_width="match_parent"
-        android:layout_height="400dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_gird_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_relative"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:orientation="horizontal"/>
     <ir.mahozad.android.PieChart
+        android:layout_alignParentBottom="true"
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
         android:layout_height="450dp"/>
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
