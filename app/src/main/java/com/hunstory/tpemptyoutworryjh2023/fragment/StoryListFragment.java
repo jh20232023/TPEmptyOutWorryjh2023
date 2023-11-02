@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.activities.MainActivity;
+import com.hunstory.tpemptyoutworryjh2023.adapter.CalendarAdapter;
 import com.hunstory.tpemptyoutworryjh2023.adapter.RecyclerForInFragmentAdapter;
 import com.hunstory.tpemptyoutworryjh2023.adapter.StorylistCardViewAdapter;
 import com.hunstory.tpemptyoutworryjh2023.data.LoadDataImagePath;
@@ -159,6 +160,13 @@ public class StoryListFragment extends Fragment {
                                     response.body().get(i).message,
                                     response.body().get(i).em,
                                     new ArrayList<String>());
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(response.body().get(i).date);
+//                            Gson gson = new Gson();
+//                            String toJson = gson.toJson(list, CalendarAdapter.class);
+//                            Intent intent = new Intent(getContext(), MainActivity.class);
+//                            intent.putExtra("json",toJson);
+//                            startActivity(intent);
 
                             retrofitDatas.no=response.body().get(i).no;
                             nonMemberDatas.add(retrofitDatas);
@@ -168,6 +176,7 @@ public class StoryListFragment extends Fragment {
                         loadDataImgPath();
 
                     } // loadDBSPL onResponse...
+
 
                     @Override
                     public void onFailure(Call<ArrayList<NonMemberDatas>> call, Throwable t) {

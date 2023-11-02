@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.adapter.CalendarAdapter;
 import com.hunstory.tpemptyoutworryjh2023.data.CalendarData;
@@ -32,17 +34,20 @@ import retrofit2.Retrofit;
 
 public class CalendarTabFragment extends Fragment {
     FragmentCalendarBinding binding;
-    Calendar calendar = Calendar.getInstance();
-    int currentYear = calendar.get(Calendar.YEAR);
-    int currentMonth = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 실제 월 값에 +1 해야합니다.
-    String dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
-    ArrayList<CalendarData> list = new ArrayList<>();
+    public Calendar calendar = Calendar.getInstance();
+    public int currentYear = calendar.get(Calendar.YEAR);
+    public int currentMonth = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 실제 월 값에 +1 해야합니다.
+    public String dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
+    public ArrayList<CalendarData> list;
+
     CalendarAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
+//        Bundle bundle = getArguments();
+//        String s= bundle.getString("jjj");
         return binding.getRoot();
     }
 
@@ -55,51 +60,38 @@ public class CalendarTabFragment extends Fragment {
         binding.ivForward.setOnClickListener(view1 -> clickForward());
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         binding.recyclerGirdCalendar.setLayoutManager(layoutManager);
+        adapterCreate("noPost");
         adapter = new CalendarAdapter(getContext(),list);
         binding.recyclerGirdCalendar.setAdapter(adapter);
-        Log.i("aaa","aaa");
-        retrofit();
-        Log.i("bbb","bbb");
-        adapter.notifyDataSetChanged();
-        Log.i("ccc","ccc");
+
+//        Bundle bundle = getArguments();
+//        String s= bundle.getString("jjj");
+//        Log.i("2",list.size()+"");
+//        Gson gson = new Gson();
+//        Log.i("3",list.size()+"");
+//        ArrayList<String> list = gson.fromJson(s,new TypeToken<ArrayList<String>>() {}.getType());
+//        Log.i("4",list.size()+"");
+//        list.size();
+//        Log.i("5",list.size()+"");
+
 
 
 
     }
-    void retrofit(){
-        dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
-        Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-        retrofitService.loadDBSPL(dateFilter, G.email).enqueue(new Callback<ArrayList<NonMemberDatas>>() {
-            @Override
-            public void onResponse(Call<ArrayList<NonMemberDatas>> call, Response<ArrayList<NonMemberDatas>> response) {
-                ArrayList<NonMemberDatas> datas = response.body();
-                int maxDay = getDaysInMouth()+1;
-                for (int day=1;day<maxDay;day++) {
-                    for (int k = 0; k < datas.size(); k++) {
-                        String[] s = datas.get(k).date.split("/"); // 걸러낸 날짜
-                        if (!s[2].equals(day + "")) {
+//
 
-                        }else {
-                            adapterCreate(datas.get(day).em);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<NonMemberDatas>> call, Throwable t) {
-
-            }
-        });
+    void listRemove(ArrayList list){
+        list.remove(0);
     }
 
     void adapterCreate(String em){
         int maxDay = getDaysInMouth()+1;
+         list = new ArrayList<>();
         for (int i=1;i<maxDay;i++){
             String dayOfWeek= getWhatDayWeek(i)+"";
-            list.add(new CalendarData(dayOfWeek,i+"",em));
+            list.add(new CalendarData(dayOfWeek,i+"",em,dateFilter));
         }
+
     }
     int getWhatDayWeek(int date){
         calendar.set(currentYear,currentMonth-1,date);
@@ -117,7 +109,9 @@ public class CalendarTabFragment extends Fragment {
             currentYear--;
             binding.date.setText(currentYear+"/"+currentMonth);
         }
-        list.clear();
+        adapterCreate("noPost");
+        adapter = new CalendarAdapter(getContext(),list);
+        binding.recyclerGirdCalendar.setAdapter(adapter);
 
 
     }
@@ -129,7 +123,10 @@ public class CalendarTabFragment extends Fragment {
             currentYear++;
             binding.date.setText(currentYear + "/" + currentMonth);
         }
-        list.clear();
+        // list.clear();
+        adapterCreate("noPost");
+        adapter = new CalendarAdapter(getContext(),list);
+        binding.recyclerGirdCalendar.setAdapter(adapter);
 
 
     }

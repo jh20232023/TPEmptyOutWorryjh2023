@@ -1,6 +1,7 @@
 package com.hunstory.tpemptyoutworryjh2023.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.hunstory.tpemptyoutworryjh2023.R;
 import com.hunstory.tpemptyoutworryjh2023.data.CalendarData;
+import com.hunstory.tpemptyoutworryjh2023.data.NonMemberDatas;
 import com.hunstory.tpemptyoutworryjh2023.databinding.RecyclerCarlendarBinding;
+import com.hunstory.tpemptyoutworryjh2023.network.G;
+import com.hunstory.tpemptyoutworryjh2023.network.RetrofitHelper;
+import com.hunstory.tpemptyoutworryjh2023.network.RetrofitService;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.VH> {
     Context context;
@@ -37,6 +48,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.VH> {
         CalendarData data = list.get(position);
 
 
+
         switch (data.dayOfWeek){
             case 1+"" : holder.binding.tvDay.setText("일요일");
             break;
@@ -52,26 +64,30 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.VH> {
             break;
             case 7+"" : holder.binding.tvDay.setText("토요일");
             break;
-
         }
 
 
-        holder.binding.tv.setText(data.day);
-        holder.binding.emoji.setImageResource(R.drawable.angry);
-//        switch (data.emotion){
-//            case 1+"" : Glide.with(context).load(R.drawable.smile).into(holder.binding.emoji);
-//                break;
-//            case 2+"" : Glide.with(context).load(R.drawable.notbad).into(holder.binding.emoji);
-//                break;
-//            case 3+"" : Glide.with(context).load(R.drawable.soso).into(holder.binding.emoji);
-//                break;
-//            case 4+"" : Glide.with(context).load(R.drawable.sad).into(holder.binding.emoji);
-//                break;
-//            case 5+"" : Glide.with(context).load(R.drawable.angry).into(holder.binding.emoji);
-//                break;
-//        }
+
+        switch (data.emotion){
+            case 1+"" : Glide.with(context).load(R.drawable.smile).into(holder.binding.emoji);
+            break;
+            case 2+"" : Glide.with(context).load(R.drawable.notbad).into(holder.binding.emoji);
+            break;
+            case 3+"" : Glide.with(context).load(R.drawable.soso).into(holder.binding.emoji);
+            break;
+            case 4+"" : Glide.with(context).load(R.drawable.sad).into(holder.binding.emoji);
+            break;
+            case 5+"" : Glide.with(context).load(R.drawable.angry).into(holder.binding.emoji);
+            break;
+            case "noPost" :holder.binding.emoji.setVisibility(View.GONE);
+            break;
+            }
+            holder.binding.tv.setText(data.day);
+            holder.binding.emoji.setImageResource(R.drawable.angry);
 
     }
+
+
 
     @Override
     public int getItemCount() {

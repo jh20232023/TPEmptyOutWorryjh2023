@@ -36,6 +36,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         String id = binding.inputLayoutId.getEditText().getText().toString();
         String pw = binding.inputLayoutPW.getEditText().getText().toString();
 
+
         Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr/");
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
         retrofitService.signIn(id,pw).enqueue(new Callback<String>() {
