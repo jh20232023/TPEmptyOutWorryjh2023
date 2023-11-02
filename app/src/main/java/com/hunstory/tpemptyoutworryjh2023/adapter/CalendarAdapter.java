@@ -38,19 +38,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.VH> {
 
 
         switch (data.dayOfWeek){
-            case 1+"" : holder.binding.tvDay.setText("금요일");
+            case 1+"" : holder.binding.tvDay.setText("일요일");
             break;
-            case 2+"" : holder.binding.tvDay.setText("토요일");
+            case 2+"" : holder.binding.tvDay.setText("월요일");
             break;
-            case 3+"" : holder.binding.tvDay.setText("일요일");
+            case 3+"" : holder.binding.tvDay.setText("화요일");
             break;
-            case 4+"" : holder.binding.tvDay.setText("월요일");
+            case 4+"" : holder.binding.tvDay.setText("수요일");
             break;
-            case 5+"" : holder.binding.tvDay.setText("화요일");
+            case 5+"" : holder.binding.tvDay.setText("목요일");
             break;
-            case 6+"" : holder.binding.tvDay.setText("수요일");
+            case 6+"" : holder.binding.tvDay.setText("금요일");
             break;
-            case 7+"" : holder.binding.tvDay.setText("목요일");
+            case 7+"" : holder.binding.tvDay.setText("토요일");
             break;
 
         }
