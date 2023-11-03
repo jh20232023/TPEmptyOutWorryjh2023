@@ -160,13 +160,9 @@ public class StoryListFragment extends Fragment {
                                     response.body().get(i).message,
                                     response.body().get(i).em,
                                     new ArrayList<String>());
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(response.body().get(i).date);
-//                            Gson gson = new Gson();
-//                            String toJson = gson.toJson(list, CalendarAdapter.class);
-//                            Intent intent = new Intent(getContext(), MainActivity.class);
-//                            intent.putExtra("json",toJson);
-//                            startActivity(intent);
+
+
+
 
                             retrofitDatas.no=response.body().get(i).no;
                             nonMemberDatas.add(retrofitDatas);

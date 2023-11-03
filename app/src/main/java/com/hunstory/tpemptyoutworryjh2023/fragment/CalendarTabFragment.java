@@ -38,16 +38,14 @@ public class CalendarTabFragment extends Fragment {
     public int currentYear = calendar.get(Calendar.YEAR);
     public int currentMonth = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 실제 월 값에 +1 해야합니다.
     public String dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
-    public ArrayList<CalendarData> list;
 
-    CalendarAdapter adapter;
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
-//        Bundle bundle = getArguments();
-//        String s= bundle.getString("jjj");
         return binding.getRoot();
     }
 
@@ -60,37 +58,77 @@ public class CalendarTabFragment extends Fragment {
         binding.ivForward.setOnClickListener(view1 -> clickForward());
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         binding.recyclerGirdCalendar.setLayoutManager(layoutManager);
-        adapterCreate("noPost");
-        adapter = new CalendarAdapter(getContext(),list);
-        binding.recyclerGirdCalendar.setAdapter(adapter);
+        retrofit(dateFilter);
 
-//        Bundle bundle = getArguments();
-//        String s= bundle.getString("jjj");
-//        Log.i("2",list.size()+"");
-//        Gson gson = new Gson();
-//        Log.i("3",list.size()+"");
-//        ArrayList<String> list = gson.fromJson(s,new TypeToken<ArrayList<String>>() {}.getType());
-//        Log.i("4",list.size()+"");
-//        list.size();
-//        Log.i("5",list.size()+"");
 
 
 
 
     }
-//
+    void retrofit(String dateFilter){
+        Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+        retrofitService.loadDBSPL(dateFilter,G.email).enqueue(new Callback<ArrayList<NonMemberDatas>>() {
+            @Override
+            public void onResponse(Call<ArrayList<NonMemberDatas>> call, Response<ArrayList<NonMemberDatas>> response) {
+                G.stringArrayList = new ArrayList<>();
+                for (int i=0; i<response.body().size();i++) {
+                    if (G.stringArrayList != null) {
+                        G.stringArrayList.add(new NonMemberDatas(
+                                response.body().get(i).date,
+                                response.body().get(i).title,
+                                response.body().get(i).message,
+                                response.body().get(i).em,
+                                new ArrayList<String>()
+                        ));
+                        adapterCreate("noPost");
+                        ArrayList<CalendarData> calendarDataList = adapterCreate("noPost");
+                        CalendarAdapter adapter = new CalendarAdapter(getContext(), calendarDataList);
+                        binding.recyclerGirdCalendar.setAdapter(adapter);
+                    }else {
+                        adapterCreate("noPost");
+                        ArrayList<CalendarData> calendarDataList = adapterCreate("noPost");
+                        CalendarAdapter adapter = new CalendarAdapter(getContext(), calendarDataList);
+                        binding.recyclerGirdCalendar.setAdapter(adapter);
+                    }
 
-    void listRemove(ArrayList list){
-        list.remove(0);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<NonMemberDatas>> call, Throwable t) {
+
+            }
+        });
+        // adapter.notifyDataSetChanged();
     }
 
-    void adapterCreate(String em){
+    ArrayList<CalendarData> adapterCreate(String em){
+        // G.stringArrayList.clear();
+        ArrayList<CalendarData> list;
         int maxDay = getDaysInMouth()+1;
          list = new ArrayList<>();
-        for (int i=1;i<maxDay;i++){
-            String dayOfWeek= getWhatDayWeek(i)+"";
-            list.add(new CalendarData(dayOfWeek,i+"",em,dateFilter));
-        }
+         list.add(new CalendarData());
+         if (G.stringArrayList.isEmpty()==false) {
+             for (int i = 1; i < maxDay; i++) {
+                 String dayOfWeek = getWhatDayWeek(i) + "";
+                 list.add(new CalendarData(dayOfWeek, i + "", em));
+             }
+             for (int k = 0; k < G.stringArrayList.size(); k++) {
+                 String[] s = G.stringArrayList.get(k).date.split("/");
+                 int parseS = Integer.parseInt(s[2]);
+                 list.set(parseS, new CalendarData(getWhatDayWeek(parseS) + "", s[2], G.stringArrayList.get(k).em));
+             }
+         } else if (G.stringArrayList.isEmpty()) {
+             for (int i = 1; i < maxDay; i++) {
+                 String dayOfWeek = getWhatDayWeek(i) + "";
+                 list.add(new CalendarData(dayOfWeek, i + "", em));
+             }
+         }
+
+        list.remove(0);
+        return new ArrayList<CalendarData>(list);
 
     }
     int getWhatDayWeek(int date){
@@ -108,10 +146,11 @@ public class CalendarTabFragment extends Fragment {
             currentMonth=12;
             currentYear--;
             binding.date.setText(currentYear+"/"+currentMonth);
+            dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
+            retrofit(dateFilter);
         }
-        adapterCreate("noPost");
-        adapter = new CalendarAdapter(getContext(),list);
-        binding.recyclerGirdCalendar.setAdapter(adapter);
+        dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
+        retrofit(dateFilter);
 
 
     }
@@ -122,11 +161,13 @@ public class CalendarTabFragment extends Fragment {
             currentMonth = 1;
             currentYear++;
             binding.date.setText(currentYear + "/" + currentMonth);
+            dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
+            retrofit(dateFilter);
         }
-        // list.clear();
-        adapterCreate("noPost");
-        adapter = new CalendarAdapter(getContext(),list);
-        binding.recyclerGirdCalendar.setAdapter(adapter);
+        dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
+        retrofit(dateFilter);
+
+
 
 
     }
