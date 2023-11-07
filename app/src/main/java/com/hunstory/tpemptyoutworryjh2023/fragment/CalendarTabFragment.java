@@ -37,7 +37,10 @@ public class CalendarTabFragment extends Fragment {
     public Calendar calendar = Calendar.getInstance();
     public int currentYear = calendar.get(Calendar.YEAR);
     public int currentMonth = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 실제 월 값에 +1 해야합니다.
+    public int devMonth = calendar.get(Calendar.MONTH);
     public String dateFilter = (currentYear - 2000) + "/" + currentMonth + "%";
+    // int count=0;
+
 
 
 
@@ -66,14 +69,20 @@ public class CalendarTabFragment extends Fragment {
 
     }
     void retrofit(String dateFilter){
+        // count++;
+        // Toast.makeText(getActivity(), count+": ccc", Toast.LENGTH_SHORT).show();
+
+
         Retrofit retrofit = RetrofitHelper.getRetrofitInstance("http://jh2023.dothome.co.kr");
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
         retrofitService.loadDBSPL(dateFilter,G.email).enqueue(new Callback<ArrayList<NonMemberDatas>>() {
             @Override
             public void onResponse(Call<ArrayList<NonMemberDatas>> call, Response<ArrayList<NonMemberDatas>> response) {
                 G.stringArrayList = new ArrayList<>();
-                for (int i=0; i<response.body().size();i++) {
-                    if (G.stringArrayList != null) {
+                if (response.body().size()!=0) {
+//                    count++;
+//                    Toast.makeText(getActivity(), count+": aaa", Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < response.body().size(); i++) {
                         G.stringArrayList.add(new NonMemberDatas(
                                 response.body().get(i).date,
                                 response.body().get(i).title,
@@ -85,27 +94,43 @@ public class CalendarTabFragment extends Fragment {
                         ArrayList<CalendarData> calendarDataList = adapterCreate("noPost");
                         CalendarAdapter adapter = new CalendarAdapter(getContext(), calendarDataList);
                         binding.recyclerGirdCalendar.setAdapter(adapter);
-                    }else {
-                        adapterCreate("noPost");
-                        ArrayList<CalendarData> calendarDataList = adapterCreate("noPost");
-                        CalendarAdapter adapter = new CalendarAdapter(getContext(), calendarDataList);
-                        binding.recyclerGirdCalendar.setAdapter(adapter);
                     }
-
+                } else {
+//                    count++;
+//                    Toast.makeText(getActivity(), count+": bbb", Toast.LENGTH_SHORT).show();
+                    calendarCreate();
 
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<NonMemberDatas>> call, Throwable t) {
+//                count++;
+//                Toast.makeText(getActivity(), count+": ddd", Toast.LENGTH_SHORT).show();
+//                Log.e("Retrofit", "onFailure: " + t.getMessage()); // 추가
+                calendarCreate();
 
             }
         });
-        // adapter.notifyDataSetChanged();
+    }
+    void calendarCreate(){
+        // count++;
+        // Toast.makeText(getActivity(), count+"", Toast.LENGTH_SHORT).show();
+        ArrayList<CalendarData> list;
+        int maxDay = getDaysInMouth()+1;
+        list = new ArrayList<>();
+        list.add(new CalendarData());
+
+        for (int i = 1; i < maxDay; i++) {
+            String dayOfWeek = getWhatDayWeek(i) + "";
+            list.add(new CalendarData(dayOfWeek, i + "", "noPost"));
+        }
+        list.remove(0);
+        CalendarAdapter adapter = new CalendarAdapter(getContext(), list);
+        binding.recyclerGirdCalendar.setAdapter(adapter);
     }
 
     ArrayList<CalendarData> adapterCreate(String em){
-        // G.stringArrayList.clear();
         ArrayList<CalendarData> list;
         int maxDay = getDaysInMouth()+1;
          list = new ArrayList<>();
@@ -120,15 +145,16 @@ public class CalendarTabFragment extends Fragment {
                  int parseS = Integer.parseInt(s[2]);
                  list.set(parseS, new CalendarData(getWhatDayWeek(parseS) + "", s[2], G.stringArrayList.get(k).em));
              }
-         } else if (G.stringArrayList.isEmpty()) {
+         } else {
              for (int i = 1; i < maxDay; i++) {
                  String dayOfWeek = getWhatDayWeek(i) + "";
                  list.add(new CalendarData(dayOfWeek, i + "", em));
+
              }
          }
-
         list.remove(0);
         return new ArrayList<CalendarData>(list);
+
 
     }
     int getWhatDayWeek(int date){
